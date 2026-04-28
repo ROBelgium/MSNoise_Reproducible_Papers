@@ -38,6 +38,9 @@ jobs:
 
           validate(load("registry.yaml"), "_schema/registry.schema.yaml", "registry.yaml")
 
+          for f in sorted(pathlib.Path("papers").rglob("meta.yaml")):
+              validate(load(f), "_schema/meta.schema.yaml", str(f))
+
           for f in sorted(pathlib.Path("papers").rglob("bundle_pointer.yaml")):
               validate(load(f), "_schema/bundle_pointer.schema.yaml", str(f))
 
@@ -61,7 +64,7 @@ jobs:
               ok = False
           for pid in ids & folders:
               paper_dir = pathlib.Path("papers") / pid
-              for required in ("README.md", "citation.bib", "project.yaml"):
+              for required in ("README.md", "citation.bib", "project.yaml", "meta.yaml"):
                   if not (paper_dir / required).exists():
                       print(f"ERROR: {pid} missing {required}")
                       ok = False

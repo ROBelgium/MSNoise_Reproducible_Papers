@@ -60,7 +60,7 @@ papers:
   cc_types:
   - CC
   n_filters: 4
-  short_description: ''
+  short_description: Single-station SC + AC, 4 frequency bands
   msnoise_version_min: 2.0.0
   levels_available: []
   data_source: fdsn://http://ws.resif.fr
@@ -81,7 +81,7 @@ papers:
   volume: 6
   pages: '251'
   network: ''
-  region: Sicily, Italy
+  region: Mt. Etna, Sicily, Italy
   period:
   - '2013-04-01'
   - '2014-10-31'
@@ -92,7 +92,7 @@ papers:
   cc_types:
   - PCC
   n_filters: 1
-  short_description: ''
+  short_description: AC with PCC, velocity changes from volcanic activity
   msnoise_version_min: 2.0.0
   levels_available: []
   data_source: ''

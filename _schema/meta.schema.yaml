@@ -1,0 +1,24 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: MSNoise Paper Meta
+description: "Human-curated display fields for a paper entry. Source of truth for manual registry fields."
+type: object
+required: [journal_abbrev, region, short_description, msnoise_version_min, levels_available]
+additionalProperties: false
+properties:
+  journal_abbrev:
+    type: string
+    description: "Short journal abbreviation (e.g. SRL, GRL)"
+  region:
+    type: string
+    description: "Geographic region / volcano name"
+  short_description:
+    type: string
+    description: "One-line approach summary for the papers table"
+  msnoise_version_min:
+    type: string
+    pattern: "^\\d+\\.\\d+\\.\\d+$"
+  levels_available:
+    type: array
+    items:
+      type: string
+      enum: [preprocess, cc, stack, mwcs, stretching, wavelet, dvv]
