@@ -1,0 +1,71 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install jsonschema pyyaml jsonschema[format]
+
+      - name: Validate YAML files against schemas
+        run: |
+          python - <<'EOF'
+          import yaml, jsonschema, pathlib, sys
+
+          def load(path):
+              return yaml.safe_load(pathlib.Path(path).read_text())
+
+          def validate(data, schema_path, label):
+              schema = load(schema_path)
+              schema.pop("$schema", None)
+              try:
+                  jsonschema.validate(data, schema)
+                  print(f"  OK  {label}")
+              except jsonschema.ValidationError as e:
+                  print(f"  FAIL {label}: {e.message}")
+                  sys.exit(1)
+
+          validate(load("registry.yaml"), "_schema/registry.schema.yaml", "registry.yaml")
+
+          for f in sorted(pathlib.Path("papers").rglob("bundle_pointer.yaml")):
+              validate(load(f), "_schema/bundle_pointer.schema.yaml", str(f))
+
+          EOF
+
+      - name: Check paper folder consistency
+        run: |
+          python - <<'EOF'
+          import yaml, pathlib, sys
+          registry = yaml.safe_load(open("registry.yaml"))
+          ids = {p["id"] for p in registry["papers"]}
+          folders = {d.name for d in pathlib.Path("papers").iterdir() if d.is_dir()}
+          missing_in_registry = folders - ids
+          missing_on_disk = ids - folders
+          ok = True
+          if missing_in_registry:
+              print(f"ERROR: folders not in registry.yaml: {missing_in_registry}")
+              ok = False
+          if missing_on_disk:
+              print(f"ERROR: registry entries with no folder: {missing_on_disk}")
+              ok = False
+          for pid in ids & folders:
+              paper_dir = pathlib.Path("papers") / pid
+              for required in ("README.md", "citation.bib", "project.yaml"):
+                  if not (paper_dir / required).exists():
+                      print(f"ERROR: {pid} missing {required}")
+                      ok = False
+          if ok:
+              print("All checks passed.")
+          sys.exit(0 if ok else 1)
+          EOF

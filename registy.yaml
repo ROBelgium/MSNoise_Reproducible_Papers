@@ -1,0 +1,41 @@
+# MSNoise Reproducible Papers — machine-readable registry
+# Each entry corresponds to a folder under papers/
+# Validated by _schema/registry.schema.yaml on PR
+
+papers:
+
+  - id: 2014_Lecocq_MSNoiseUndervolc
+    title: "MSNoise, a Python Package for Monitoring Seismic Velocity Changes Using Ambient Seismic Noise"
+    authors: ["Lecocq, T.", "Caudron, C.", "Brenguier, F."]
+    year: 2014
+    doi: "10.1785/0220130073"
+    journal: "Seismological Research Letters"
+    volume: 85
+    pages: "715-726"
+    network: YA
+    region: "Piton de la Fournaise, La Réunion"
+    period: ["2009-09-01", "2011-07-01"]
+    components: [ZZ]
+    cc_types: [CC]
+    n_filters: 1
+    msnoise_version_min: "2.0.0"
+    levels_available: []          # bundle_pointer.yaml not yet published
+    data_source: "fdsn://http://ws.resif.fr"
+
+  - id: 2016_DePlaen_PitonDeLaFournaise
+    title: "Single-station monitoring of volcanoes using seismic ambient noise"
+    authors: ["De Plaen, R.S.M.", "Lecocq, T.", "Caudron, C.", "Ferrazzini, V.", "Francis, O."]
+    year: 2016
+    doi: "10.1002/2016GL070078"
+    journal: "Geophysical Research Letters"
+    volume: 43
+    pages: "8511-8518"
+    network: PF
+    region: "Piton de la Fournaise, La Réunion"
+    period: ["2014-01-01", "2014-07-31"]
+    components: [ZZ, EE, NN, EZ, NZ, EN]
+    cc_types: [CC]
+    n_filters: 4
+    msnoise_version_min: "2.0.0"
+    levels_available: []          # bundle_pointer.yaml not yet published
+    data_source: "fdsn://http://ws.resif.fr"

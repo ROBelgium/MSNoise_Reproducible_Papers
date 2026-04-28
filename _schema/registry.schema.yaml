@@ -1,0 +1,85 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: MSNoise Reproducible Papers Registry
+type: object
+required: [papers]
+additionalProperties: false
+properties:
+  papers:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+        - id
+        - title
+        - authors
+        - year
+        - doi
+        - journal
+        - network
+        - region
+        - period
+        - components
+        - cc_types
+        - n_filters
+        - msnoise_version_min
+        - levels_available
+        - data_source
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          pattern: "^\\d{4}_[A-Za-z]+_[A-Za-z0-9]+$"
+          description: "Must match the folder name under papers/"
+        title:
+          type: string
+        authors:
+          type: array
+          minItems: 1
+          items: {type: string}
+        year:
+          type: integer
+          minimum: 2000
+        doi:
+          type: string
+          pattern: "^10\\."
+        journal:
+          type: string
+        volume:
+          type: [integer, "null"]
+        pages:
+          type: [string, "null"]
+        network:
+          type: string
+          description: "FDSN network code"
+        region:
+          type: string
+        period:
+          type: array
+          items: {type: string, format: date}
+          minItems: 2
+          maxItems: 2
+        components:
+          type: array
+          items:
+            type: string
+            enum: [ZZ, EE, NN, EZ, NZ, EN, ZE, ZN, NE]
+        cc_types:
+          type: array
+          items:
+            type: string
+            enum: [CC, PCC]
+        n_filters:
+          type: integer
+          minimum: 1
+        msnoise_version_min:
+          type: string
+          pattern: "^\\d+\\.\\d+\\.\\d+$"
+        levels_available:
+          type: array
+          items:
+            type: string
+            enum: [preprocess, cc, stack, mwcs, stretching, wavelet, dvv]
+        data_source:
+          type: string
+          description: "URI scheme: fdsn://<url> or sds://<path>"

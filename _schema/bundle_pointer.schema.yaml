@@ -1,0 +1,33 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: MSNoise Bundle Pointer
+type: object
+required: [msnoise_version_min, created_at, levels]
+additionalProperties: false
+properties:
+  msnoise_version_min:
+    type: string
+    pattern: "^\\d+\\.\\d+\\.\\d+$"
+  created_at:
+    type: string
+    format: date
+  levels:
+    type: object
+    minProperties: 1
+    additionalProperties: false
+    patternProperties:
+      "^(preprocess|cc|stack|mwcs|stretching|wavelet|dvv)$":
+        type: object
+        required: [description, url, sha256, size_gb]
+        additionalProperties: false
+        properties:
+          description:
+            type: string
+          url:
+            type: string
+            pattern: "^https://"
+          sha256:
+            type: string
+            pattern: "^[0-9a-f]{64}$"
+          size_gb:
+            type: number
+            minimum: 0
