@@ -99,3 +99,38 @@ papers:
   levels_available: []
   data_open: false
   data_source: ''
+- id: 2019_Yates_WhiteIsland
+  title: Volcanic, Coseismic, and Seasonal Changes Detected at White Island (Whakaari)
+    Volcano, New Zealand, Using Seismic Ambient Noise
+  authors:
+  - Yates, A. S.
+  - Savage, M. K.
+  - Jolly, A. D.
+  - Caudron, C.
+  - Hamling, I. J.
+  year: 2019
+  doi: 10.1029/2018GL080580
+  journal: Geophysical Research Letters
+  journal_abbrev: GRL
+  volume: 46
+  pages: 99-108
+  network: NZ
+  region: White Island (Whakaari), New Zealand
+  period:
+  - '2007-01-01'
+  - '2017-01-01'
+  components:
+  - EE
+  - EN
+  - EZ
+  - NN
+  - NZ
+  - ZZ
+  cc_types: []
+  n_filters: 2
+  short_description: Single-station SC + AC, 2 frequency bands, volcanic/coseismic/seasonal
+    separation
+  msnoise_version_min: 2.0.0
+  levels_available: []
+  data_open: true
+  data_source: fdsn://https://service.geonet.org.nz

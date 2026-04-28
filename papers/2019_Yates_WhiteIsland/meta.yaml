@@ -1,0 +1,7 @@
+journal_abbrev: "GRL"
+region: "White Island (Whakaari), New Zealand"
+network: "NZ"
+short_description: "Single-station SC + AC, 2 frequency bands, volcanic/coseismic/seasonal separation"
+msnoise_version_min: "2.0.0"
+levels_available: []
+data_open: true
