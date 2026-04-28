@@ -1,5 +1,6 @@
-journal_abbrev: "SRL"
-region: "Piton de la Fournaise, La Réunion"
-short_description: "Foundation of MSNoise"
-msnoise_version_min: "2.0.0"
+journal_abbrev: SRL
+region: Piton de la Fournaise, La Réunion
+network: YA
+short_description: Foundation of MSNoise
+msnoise_version_min: 2.0.0
 levels_available: []

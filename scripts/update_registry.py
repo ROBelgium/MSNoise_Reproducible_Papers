@@ -28,6 +28,7 @@ MANUAL_DEFAULTS = {
     "levels_available": [],
     "msnoise_version_min": "2.0.0",
     "region": "",
+    "network": "",
 }
 
 
@@ -85,13 +86,8 @@ def parse_project(path: pathlib.Path) -> dict:
     ds = proj.get("data_sources") or [{}]
     data_source = ds[0].get("uri", "") if ds else ""
 
-    stations = proj.get("stations") or {}
-    ep = stations.get("station_endpoint", "") if isinstance(stations, dict) else ""
-    m = re.search(r"[?&]network=([^&]+)", ep)
-    network = m.group(1) if m else ""
-
     return {
-        "network": network,
+        "network": "",
         "period": period,
         "components": sorted(comps),
         "cc_types": sorted(cc_types),

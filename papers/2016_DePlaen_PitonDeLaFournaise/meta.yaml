@@ -1,5 +1,6 @@
-journal_abbrev: "GRL"
-region: "Piton de la Fournaise, La Réunion"
-short_description: "Single-station SC + AC, 4 frequency bands"
-msnoise_version_min: "2.0.0"
+journal_abbrev: GRL
+region: Piton de la Fournaise, La Réunion
+network: PF
+short_description: Single-station SC + AC, 4 frequency bands
+msnoise_version_min: 2.0.0
 levels_available: []

@@ -1,5 +1,6 @@
-journal_abbrev: "Front. Earth Sci."
-region: "Mt. Etna, Sicily, Italy"
-short_description: "AC with PCC, velocity changes from volcanic activity"
-msnoise_version_min: "2.0.0"
+journal_abbrev: Front. Earth Sci.
+region: Mt. Etna, Sicily, Italy
+network: IV
+short_description: AC with PCC, velocity changes from volcanic activity
+msnoise_version_min: 2.0.0
 levels_available: []
