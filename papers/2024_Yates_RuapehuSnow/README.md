@@ -8,10 +8,6 @@
 
 Single-station SC on 9 GeoNet stations around Ruapehu over 2005–2009. Seasonal velocity changes (±0.5%) are closely correlated with winter snow cover at summit stations. Velocity changes at off-volcano stations follow groundwater (precipitation) cycles instead. Depth inversion suggests seasonal changes occur within the upper few hundred meters. The timing of the 2006 and 2007 spring phreatic eruptions coincides with an earlier velocity decrease at 200–300 m depth linked to snow unloading.
 
-## MSNoise scope
-
-MSNoise handles **CCF computation only** (preprocess → cc → filter → stack + refstack). Velocity changes are computed **externally** using the cross-wavelet transform approach of Mao et al. (2020) via PyCWT — not MSNoise's built-in wavelet step.
-
 ## Network & stations
 
 - **Network:** NZ (GeoNet) — 7 short-period + 2 broadband
