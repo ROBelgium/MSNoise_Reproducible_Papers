@@ -1,0 +1,88 @@
+name: Validate project.yaml (MSNoise db init)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'papers/**/project*.yaml'
+      - '.github/workflows/validate_projects.yml'
+  pull_request:
+    paths:
+      - 'papers/**/project*.yaml'
+      - '.github/workflows/validate_projects.yml'
+
+jobs:
+  # Step 1: discover paper folders dynamically so the matrix stays up to date
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      papers: ${{ steps.list.outputs.papers }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: list
+        run: |
+          # Emit a JSON array of paper folder names that contain project*.yaml
+          papers=$(python3 - <<'EOF'
+          import pathlib, json
+          folders = sorted(
+              d.name for d in pathlib.Path("papers").iterdir()
+              if d.is_dir() and list(d.glob("project*.yaml"))
+          )
+          print(json.dumps(folders))
+          EOF
+          )
+          echo "papers=$papers" >> "$GITHUB_OUTPUT"
+
+  # Step 2: one job per paper, parallelised via matrix
+  db-init:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false          # keep running other papers if one fails
+      matrix:
+        paper: ${{ fromJson(needs.discover.outputs.papers) }}
+
+    name: "db init — ${{ matrix.paper }}"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install MSNoise from master
+        run: |
+          pip install --upgrade pip
+          pip install "git+https://github.com/ROBelgium/MSNoise.git@master#egg=msnoise"
+
+      - name: Run db init for each project*.yaml
+        run: |
+          set -e
+          PAPER_DIR="papers/${{ matrix.paper }}"
+          YAMLS=$(python3 -c "
+          import pathlib, json
+          files = sorted(pathlib.Path('$PAPER_DIR').glob('project*.yaml'))
+          print('\n'.join(str(f) for f in files))
+          ")
+
+          echo "Found project files:"
+          echo "$YAMLS"
+
+          while IFS= read -r yaml_path; do
+            echo ""
+            echo "──────────────────────────────────────────"
+            echo "Testing: $yaml_path"
+            echo "──────────────────────────────────────────"
+
+            # Fresh temp dir per project file
+            TMPDIR=$(mktemp -d)
+            cd "$TMPDIR"
+
+            msnoise db init --tech 1 --from-yaml "$GITHUB_WORKSPACE/$yaml_path"
+
+            echo "OK: $yaml_path"
+            cd "$GITHUB_WORKSPACE"
+            rm -rf "$TMPDIR"
+          done <<< "$YAMLS"
