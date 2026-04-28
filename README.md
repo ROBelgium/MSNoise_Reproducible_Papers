@@ -33,8 +33,8 @@ msnoise run preprocess
 <!-- PAPERS_START -->
 | Year | Reference | Network | Approach |
 |------|-----------|---------|----------|
-| 2014 | [Lecocq et al., *Seismological Research Letters*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA � Piton de la Fournaise, La Réunion |  |
-| 2016 | [De Plaen et al., *Geophysical Research Letters*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF � Piton de la Fournaise, La Réunion |  |
+| 2014 | [Lecocq et al., *Seismological Research Letters*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA - Piton de la Fournaise, La Réunion |  |
+| 2016 | [De Plaen et al., *Geophysical Research Letters*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF - Piton de la Fournaise, La Réunion |  |
 <!-- PAPERS_END -->
 
 ## Contributing

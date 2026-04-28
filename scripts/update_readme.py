@@ -33,7 +33,7 @@ def build_table(papers: list) -> str:
         authors = fmt_authors(p["authors"])
         journal = p.get("journal_abbrev") or p["journal"]
         ref = f"[{authors}, *{journal}*](papers/{p['id']}/)"
-        network = f"{p['network']} — {p.get('region', '')}"
+        network = f"{p['network']} - {p.get('region', '')}"
         approach = p.get("short_description", "")
         rows.append(f"| {p['year']} | {ref} | {network} | {approach} |")
     return "\n".join(rows)
