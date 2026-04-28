@@ -78,3 +78,12 @@ jobs:
             echo "Run: python scripts/update_registry.py"
             exit 1
           )
+
+      - name: Check README.md papers table is up to date
+        run: |
+          python scripts/update_readme.py
+          git diff --exit-code README.md || (
+            echo "ERROR: README.md papers table is out of date."
+            echo "Run: python scripts/update_readme.py"
+            exit 1
+          )

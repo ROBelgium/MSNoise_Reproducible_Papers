@@ -30,10 +30,12 @@ msnoise run preprocess
 
 ## Papers
 
+<!-- PAPERS_START -->
 | Year | Reference | Network | Approach |
 |------|-----------|---------|----------|
-| 2014 | [Lecocq, Caudron & Brenguier, *SRL*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA — Piton de la Fournaise | Inter-station CC, ZZ |
-| 2016 | [De Plaen et al., *GRL*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF — Piton de la Fournaise | Single-station SC + AC, 4 frequency bands |
+| 2014 | [Lecocq et al., *Seismological Research Letters*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA � Piton de la Fournaise, La Réunion |  |
+| 2016 | [De Plaen et al., *Geophysical Research Letters*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF � Piton de la Fournaise, La Réunion |  |
+<!-- PAPERS_END -->
 
 ## Contributing
 
