@@ -1,5 +1,6 @@
 msnoise_project_version: 1
 # De Plaen et al. (2019) - Front. Earth Sci. 6:251
+# Network:   IV
 # Stations: IV.ECPN, IV.EPDN, IV.EPLC  (Etna, broadband, 100 Hz)
 # Period:   2013-04-01 - 2014-10-31
 

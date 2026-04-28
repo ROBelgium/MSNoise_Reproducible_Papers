@@ -14,7 +14,7 @@ papers:
   year: 2014
   doi: 10.1785/0220130073
   journal: Seismological Research Letters
-  journal_abbrev: ''
+  journal_abbrev: SRL
   volume: 85
   pages: 715-726
   network: YA
@@ -27,7 +27,7 @@ papers:
   cc_types:
   - CC
   n_filters: 1
-  short_description: ''
+  short_description: Foundation of MSNoise
   msnoise_version_min: 2.0.0
   levels_available: []
   data_source: fdsn://http://ws.resif.fr
@@ -42,7 +42,7 @@ papers:
   year: 2016
   doi: 10.1002/2016GL070078
   journal: Geophysical Research Letters
-  journal_abbrev: ''
+  journal_abbrev: GRL
   volume: 43
   pages: 8511-8518
   network: PF
@@ -77,11 +77,11 @@ papers:
   year: 2019
   doi: 10.3389/feart.2018.00251
   journal: Frontiers in Earth Science
-  journal_abbrev: ''
+  journal_abbrev: Front. Earth Sci.
   volume: 6
   pages: '251'
   network: ''
-  region: ''
+  region: Sicily, Italy
   period:
   - '2013-04-01'
   - '2014-10-31'
