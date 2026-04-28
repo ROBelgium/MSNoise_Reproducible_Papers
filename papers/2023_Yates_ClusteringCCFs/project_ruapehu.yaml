@@ -62,7 +62,7 @@ stretching_1:
   # §2.3: dynamic lag start = interstation_distance / 500 m/s, width = 40 s
   stretching_lag: "dynamic"
   stretching_v: 0.5                 # 500 m/s minimum ballistic wave speed
-  stretching_minlag: 0.0            # unused when lag=dynamic (set by v)
+  stretching_minlag: 0.0            # unused when lag=dynamic
   stretching_width: 40.0
   stretching_sides: "both"
   stretching_max: 0.01
