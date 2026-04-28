@@ -21,5 +21,5 @@ Single-station SC on 9 GeoNet stations around Ruapehu over 2005–2009. Seasonal
 - SC only (EN, EZ, NZ); AC excluded — 1-bit whitening incompatible with classical AC (`whitening="C"` handles this)
 - No instrument response removal (single-station approach)
 - Reference stack: all available days
-- **External velocity analysis:** cross-wavelet transform (Morlet, 0.1–8.0 Hz), coda start=5 s, dynamic end=20 cycles (max 120 s), coherence threshold=0.7, max dt=0.3 s, ≥25% non-zero weights required
+- **Velocity analysis:** cross-wavelet transform (Morlet, 0.1–8.0 Hz), coda start=5 s, dynamic end=20 cycles (max 120 s), coherence threshold=0.7, max dt=0.3 s, ≥25% non-zero weights required
 - **Depth inversion:** Haney & Tsai (2017) Rayleigh wave kernels, 4-layer Vs model from Godfrey et al. (2017)
