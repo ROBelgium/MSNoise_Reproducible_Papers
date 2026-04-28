@@ -41,10 +41,14 @@ def build_table(papers: list) -> str:
 
 
 def update():
-    registry = yaml.safe_load(REGISTRY.read_text())
+    registry = yaml.safe_load(REGISTRY.read_text(encoding="utf-8"))
     table = build_table(registry["papers"])
 
-    readme = README.read_text()
+    readme = README.read_text(encoding="utf-8")
+    if START not in readme or END not in readme:
+        raise ValueError(
+            f"Markers {START!r} / {END!r} not found in README.md — did you git pull?"
+        )
     start_idx = readme.index(START) + len(START)
     end_idx = readme.index(END)
     new_readme = (
@@ -54,7 +58,7 @@ def update():
         + "\n"
         + readme[end_idx:]
     )
-    README.write_text(new_readme)
+    README.write_text(new_readme, encoding="utf-8")
     print("README.md updated.")
 
 

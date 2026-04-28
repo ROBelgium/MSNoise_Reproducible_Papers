@@ -66,7 +66,7 @@ def _normalise_author(author: str) -> str:
 
 
 def parse_project(path: pathlib.Path) -> dict:
-    proj = yaml.safe_load(path.read_text())
+    proj = yaml.safe_load(path.read_text(encoding="utf-8"))
 
     g = proj.get("global_1", {})
     period = [str(g.get("startdate", "")), str(g.get("enddate", ""))]
@@ -101,7 +101,7 @@ def parse_meta(path: pathlib.Path) -> dict:
     """Read meta.yaml — source of truth for all manual fields."""
     if not path.exists():
         return {}
-    return yaml.safe_load(path.read_text()) or {}
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
 
 def build_entry(paper_dir: pathlib.Path) -> dict:
@@ -160,7 +160,7 @@ def update():
     )
     body = yaml.dump({"papers": papers}, allow_unicode=True, sort_keys=False,
                      default_flow_style=False)
-    REGISTRY.write_text(header + body)
+    REGISTRY.write_text(header + body, encoding="utf-8")
     print(f"registry.yaml updated ({len(papers)} papers).")
     if not ok:
         print("WARNING: some short_description fields are empty — fill in meta.yaml",
