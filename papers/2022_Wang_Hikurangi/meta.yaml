@@ -1,0 +1,8 @@
+journal_abbrev: "EPSL"
+region: "Northern Hikurangi margin, New Zealand (offshore)"
+network: "YH"
+short_description: "SC on OBS data, dv/v related to slow slip events, MWCS"
+msnoise_version_min: "2.0.0"
+levels_available: []
+data_open: true
+uses_msnoise: true

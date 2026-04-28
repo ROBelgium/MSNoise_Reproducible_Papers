@@ -138,6 +138,45 @@ papers:
   data_open: true
   uses_msnoise: true
   data_source: fdsn://https://service.geonet.org.nz
+- id: 2022_Wang_Hikurangi
+  title: Temporal velocity variations in the northern Hikurangi margin and the relation
+    to slow slip
+  authors:
+  - Wang, W.
+  - Savage, M.K.
+  - Yates, A.
+  - Zal, H.J.
+  - Webb, S.
+  - Boulton, C.
+  - Warren-Smith, E.
+  - Madley, M.
+  - Stern, T.
+  - Fry, B.
+  - Mochizuki, K.
+  - Wallace, L.
+  year: 2022
+  doi: 10.1016/j.epsl.2022.117443
+  journal: Earth and Planetary Science Letters
+  journal_abbrev: EPSL
+  volume: 584
+  pages: '117443'
+  network: YH
+  region: Northern Hikurangi margin, New Zealand (offshore)
+  period:
+  - '2014-05-01'
+  - '2015-06-30'
+  components:
+  - RT
+  - ZR
+  - ZT
+  cc_types: []
+  n_filters: 2
+  short_description: SC on OBS data, dv/v related to slow slip events, MWCS
+  msnoise_version_min: 2.0.0
+  levels_available: []
+  data_open: true
+  uses_msnoise: true
+  data_source: fdsn://http://service.iris.edu
 - id: 2023_Yates_ClusteringCCFs
   title: 'Assessing similarity in continuous seismic cross-correlation functions using
     hierarchical clustering: application to Ruapehu and Piton de la Fournaise volcanoes'

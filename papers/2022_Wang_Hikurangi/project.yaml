@@ -1,0 +1,158 @@
+msnoise_project_version: 1
+# Wang et al. (2022) - Earth Planet. Sci. Lett. 584:117443
+# doi:10.1016/j.epsl.2022.117443
+# "Temporal velocity variations in the northern Hikurangi margin
+#  and the relation to slow slip"
+# Network: YH (HOBITSS OBS deployment, IRIS-DMC, experiment code YH 2014-15)
+# 9 stations used:
+#   LOBS (broadband, Lamont):  L7, L8, L9
+#   EOBS (short-period 1 Hz, ERI Tokyo): E1, E2, E3, E4, E5
+# Period: 2014-05-01 – 2015-06-30
+# Approach: SC only (single-station cross-component)
+#   Components: vertical-parallel (ZR), vertical-perpendicular (ZT),
+#               parallel-perpendicular (RT) — where R=coastline-parallel
+# IMPORTANT: horizontal components must be rotated to coastline-parallel/
+#   perpendicular BEFORE import (see §2, Zal et al. 2020 for orientations).
+#   LOBS6 excluded (horizontal orientations undetermined).
+#   LOBS1/2/4/5/10 excluded (insufficient data or on subducting plate).
+# KEY NOTE: corr_duration differs between instrument types:
+#   LOBS (broadband): 14400 s (4 hr) → cc_1
+#   EOBS (short-period): 1800 s (30 min) → cc_2
+#   Both chains share identical filter/mwcs/dtt parameters.
+
+global_1:
+  startdate: "2014-05-01"
+  enddate: "2015-06-30"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  # §3: "band pass filtered from 0.5 to 50 s" = 0.02–2.0 Hz, "down sampled to 20 Hz"
+  cc_sampling_rate: 20.0
+  resampling_method: Decimate
+  preprocess_highpass: 0.02
+  preprocess_lowpass: 2.0
+  preprocess_components: "Z,R,T"   # after coastline rotation; R=parallel, T=perpendicular
+  remove_response: "Y"             # OBS instruments require response removal
+
+data_sources:
+  - uri: "fdsn://http://service.iris.edu"
+    network: "YH"
+    channels: "BH?,HH?,EH?"
+
+# ── LOBS (broadband) — 14400 s windows ────────────────────────────────────
+
+cc_1:
+  after: preprocess_1
+  # §3: 14400 s segments for LOBSs, 70% overlap
+  maxlag: 200.0                     # lag window extends to ±70 s + margin
+  corr_duration: 14400.0
+  overlap: 0.7
+  winsorizing: 3.0                  # §3: "clipping data at three times the RMS"
+  # §3: "spectral whitening between 2.5 to 20 s" = 0.05–0.4 Hz
+  # whitening applied for cross-components (all SC pairs have different components)
+  whitening: "C"
+  components_to_compute: ""
+  components_to_compute_single_station: "ZR,ZT,RT"
+  keep_days: "Y"
+
+filter_1:
+  after: cc_1
+  # Whitening band 2.5–20 s; MWCS analysis band 2.5–14 s
+  # Use wider band for filter to retain full whitened signal
+  freqmin: 0.05                     # 1/20 s
+  freqmax: 0.4                      # 1/2.5 s
+  CC: "N"
+  SC: "Y"
+  AC: "N"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  mov_stack: "(('20D','1D'))"       # §3: "linear stacks of 20 daily cross-correlations"
+
+refstack_1:
+  after: filter_1
+  # §3: "reference stack of all available days" (after per-station quality selection)
+  ref_begin: "2014-05-01"
+  ref_end: "2015-06-30"
+  stack_method: linear
+
+mwcs_1:
+  after: [stack_1, refstack_1]
+  # §3: "20-second moving windows with a 4-second step (80% overlap)"
+  # §3: "frequency band of 2.5-14 s" = 0.071–0.4 Hz
+  mwcs_low: 0.071                   # 1/14 s
+  mwcs_high: 0.4                    # 1/2.5 s
+  mwcs_wlen: 20.0
+  mwcs_step: 4.0
+
+mwcs_dtt_1:
+  after: mwcs_1
+  # §3: lag time window ±20 s to ±70 s
+  dtt_lag: "static"
+  dtt_v: 1.0
+  dtt_minlag: 20.0
+  dtt_width: 50.0                   # 20 + 50 = 70 s
+  dtt_sides: "both"
+  dtt_mincoh: 0.89                  # §3: "threshold of coherence is set to 0.89"
+  dtt_maxerr: 0.1                   # §3: "error greater than 0.1 seconds are excluded"
+  dtt_maxdtt: 0.2                   # §3: "delay time measurements greater than 0.2 seconds excluded"
+
+mwcs_dtt_dvv_1:
+  after: mwcs_dtt_1
+
+# ── EOBS (short-period, 1 Hz) — 1800 s windows ────────────────────────────
+
+cc_2:
+  after: preprocess_1
+  # §3: "1800 s segments for EOBSs, 70% overlap"
+  maxlag: 200.0
+  corr_duration: 1800.0
+  overlap: 0.7
+  winsorizing: 3.0
+  whitening: "C"
+  components_to_compute: ""
+  components_to_compute_single_station: "ZR,ZT,RT"
+  keep_days: "Y"
+
+filter_2:
+  after: cc_2
+  freqmin: 0.05
+  freqmax: 0.4
+  CC: "N"
+  SC: "Y"
+  AC: "N"
+
+stack_2:
+  after: filter_2
+  stack_method: linear
+  mov_stack: "(('20D','1D'))"
+
+refstack_2:
+  after: filter_2
+  ref_begin: "2014-05-01"
+  ref_end: "2015-06-30"
+  stack_method: linear
+
+mwcs_2:
+  after: [stack_2, refstack_2]
+  mwcs_low: 0.071
+  mwcs_high: 0.4
+  mwcs_wlen: 20.0
+  mwcs_step: 4.0
+
+mwcs_dtt_2:
+  after: mwcs_2
+  dtt_lag: "static"
+  dtt_v: 1.0
+  dtt_minlag: 20.0
+  dtt_width: 50.0
+  dtt_sides: "both"
+  dtt_mincoh: 0.89
+  dtt_maxerr: 0.1
+  dtt_maxdtt: 0.2
+
+mwcs_dtt_dvv_2:
+  after: mwcs_dtt_2
