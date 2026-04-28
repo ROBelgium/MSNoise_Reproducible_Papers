@@ -88,6 +88,8 @@ properties:
             enum: [preprocess, cc, stack, mwcs, stretching, wavelet, dvv]
         data_open:
           type: boolean
+        uses_msnoise:
+          type: boolean
         data_source:
           type: string
           description: "URI scheme: fdsn://<url> or sds://<path>"

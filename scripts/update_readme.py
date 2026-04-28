@@ -26,8 +26,8 @@ def fmt_authors(authors: list) -> str:
 
 def build_table(papers: list) -> str:
     rows = [
-        "| Year | Reference | Network | Approach | Data | Project |",
-        "|------|-----------|---------|----------|------|---------|",
+        "| Year | Reference | Network | Approach | Data | MSNoise | Project |",
+        "|------|-----------|---------|----------|------|---------|---------|",
     ]
     for p in sorted(papers, key=lambda x: x["year"]):
         authors = fmt_authors(p["authors"])
@@ -36,8 +36,9 @@ def build_table(papers: list) -> str:
         network = f"{p['network']} - {p.get('region', '')}"
         approach = p.get("short_description", "")
         data_flag = "✅" if p.get("data_open") else "❌"
+        msnoise_flag = "✅" if p.get("uses_msnoise") else "❌"
         project_link = f"[🔗](papers/{p['id']})"
-        rows.append(f"| {p['year']} | {ref} | {network} | {approach} | {data_flag} | {project_link} |")
+        rows.append(f"| {p['year']} | {ref} | {network} | {approach} | {data_flag} | {msnoise_flag} | {project_link} |")
     return "\n".join(rows)
 
 

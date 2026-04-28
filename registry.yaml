@@ -31,6 +31,7 @@ papers:
   msnoise_version_min: 2.0.0
   levels_available: []
   data_open: true
+  uses_msnoise: true
   data_source: fdsn://http://ws.resif.fr
 - id: 2016_DePlaen_PitonDeLaFournaise
   title: Single-station monitoring of volcanoes using seismic ambient noise
@@ -65,6 +66,7 @@ papers:
   msnoise_version_min: 2.0.0
   levels_available: []
   data_open: true
+  uses_msnoise: true
   data_source: fdsn://http://ws.resif.fr
 - id: 2019_DePlaen_Etna
   title: Temporal Changes of Seismic Velocity Caused by Volcanic Activity at Mt. Etna
@@ -98,6 +100,7 @@ papers:
   msnoise_version_min: 2.0.0
   levels_available: []
   data_open: false
+  uses_msnoise: true
   data_source: ''
 - id: 2019_Yates_WhiteIsland
   title: Volcanic, Coseismic, and Seasonal Changes Detected at White Island (Whakaari)
@@ -133,4 +136,5 @@ papers:
   msnoise_version_min: 2.0.0
   levels_available: []
   data_open: true
+  uses_msnoise: true
   data_source: fdsn://https://service.geonet.org.nz
