@@ -32,7 +32,7 @@ def build_table(papers: list) -> str:
     for p in sorted(papers, key=lambda x: x["year"]):
         authors = fmt_authors(p["authors"])
         journal = p.get("journal_abbrev") or p["journal"]
-        ref = f"[{authors}, *{journal}*](papers/{p['id']}/)"
+        ref = f"[{authors}, *{journal}*](https://doi.org/{p['doi']})"
         network = f"{p['network']} - {p.get('region', '')}"
         approach = p.get("short_description", "")
         data_flag = "✅" if p.get("data_open") else "❌"
