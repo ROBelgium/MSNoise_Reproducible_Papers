@@ -2,7 +2,7 @@ $schema: "https://json-schema.org/draft/2020-12/schema"
 title: MSNoise Paper Meta
 description: "Human-curated display fields for a paper entry. Source of truth for manual registry fields."
 type: object
-required: [journal_abbrev, region, network, short_description, msnoise_version_min, levels_available, data_open, uses_msnoise]
+required: [journal_abbrev, region, network, short_description, msnoise_version_min, levels_available, data_open, uses_msnoise, validated]
 additionalProperties: false
 properties:
   journal_abbrev:
@@ -31,3 +31,6 @@ properties:
   uses_msnoise:
     type: boolean
     description: "True if the original study used MSNoise; False for reproductions or pre-MSNoise methods"
+  validated:
+    type: boolean
+    description: "True if this project.yaml has been run end-to-end and results verified"

@@ -1,8 +1,10 @@
-journal_abbrev: "JGR Solid Earth"
-region: "Mt. Ruapehu, New Zealand"
-network: "NZ"
-short_description: "SC + cross-wavelet transform; seasonal snow influence on dv/v and spring eruption timing"
-msnoise_version_min: "2.0.0"
+journal_abbrev: JGR Solid Earth
+region: Mt. Ruapehu, New Zealand
+network: NZ
+short_description: SC + cross-wavelet transform; seasonal snow influence on dv/v and
+  spring eruption timing
+msnoise_version_min: 2.0.0
 levels_available: []
 data_open: true
 uses_msnoise: true
+validated: false

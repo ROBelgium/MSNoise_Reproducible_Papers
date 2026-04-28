@@ -6,3 +6,4 @@ msnoise_version_min: 2.0.0
 levels_available: []
 data_open: false
 uses_msnoise: true
+validated: false

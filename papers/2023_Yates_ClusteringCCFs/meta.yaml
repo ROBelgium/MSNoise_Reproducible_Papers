@@ -1,8 +1,10 @@
-journal_abbrev: "GJI"
-region: "Piton de la Fournaise, La Réunion + Mt. Ruapehu, New Zealand"
-network: "YA, NZ"
-short_description: "CC + hierarchical clustering to assess CCF similarity; 2 sites, 2 frequency bands each"
-msnoise_version_min: "2.0.0"
+journal_abbrev: GJI
+region: Piton de la Fournaise, La Réunion + Mt. Ruapehu, New Zealand
+network: YA, NZ
+short_description: CC + hierarchical clustering to assess CCF similarity; 2 sites,
+  2 frequency bands each
+msnoise_version_min: 2.0.0
 levels_available: []
 data_open: true
 uses_msnoise: true
+validated: false

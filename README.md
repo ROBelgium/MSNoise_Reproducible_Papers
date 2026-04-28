@@ -31,15 +31,15 @@ msnoise run preprocess
 ## Papers
 
 <!-- PAPERS_START -->
-| Year | Reference | Network | Approach | Data | MSNoise | Project |
-|------|-----------|---------|----------|------|---------|---------|
-| 2014 | [Lecocq et al., *SRL*](https://doi.org/10.1785/0220130073) | YA - Piton de la Fournaise, La Réunion | Foundation of MSNoise, CC-ZZ only | ✅ | ✅ | [🔗](papers/2014_Lecocq_MSNoiseUndervolc) |
-| 2016 | [De Plaen et al., *GRL*](https://doi.org/10.1002/2016GL070078) | PF - Piton de la Fournaise, La Réunion | Single-station SC + AC, 4 frequency bands | ✅ | ✅ | [🔗](papers/2016_DePlaen_PitonDeLaFournaise) |
-| 2019 | [De Plaen et al., *Front. Earth Sci.*](https://doi.org/10.3389/feart.2018.00251) | IV - Mt. Etna, Sicily, Italy | AC with PCC, velocity changes from volcanic activity | ❌ | ✅ | [🔗](papers/2019_DePlaen_Etna) |
-| 2019 | [Yates et al., *GRL*](https://doi.org/10.1029/2018GL080580) | NZ - White Island (Whakaari), New Zealand | Single-station SC + AC, 2 frequency bands, volcanic/coseismic/seasonal separation | ✅ | ✅ | [🔗](papers/2019_Yates_WhiteIsland) |
-| 2022 | [Wang et al., *EPSL*](https://doi.org/10.1016/j.epsl.2022.117443) | YH - Northern Hikurangi margin, New Zealand (offshore) | SC on OBS data, dv/v related to slow slip events, MWCS | ✅ | ✅ | [🔗](papers/2022_Wang_Hikurangi) |
-| 2023 | [Yates et al., *GJI*](https://doi.org/10.1093/gji/ggac469) | YA, NZ - Piton de la Fournaise, La Réunion + Mt. Ruapehu, New Zealand | CC + hierarchical clustering to assess CCF similarity; 2 sites, 2 frequency bands each | ✅ | ✅ | [🔗](papers/2023_Yates_ClusteringCCFs) |
-| 2024 | [Yates et al., *JGR Solid Earth*](https://doi.org/10.1029/2024JB029568) | NZ - Mt. Ruapehu, New Zealand | SC + cross-wavelet transform; seasonal snow influence on dv/v and spring eruption timing | ✅ | ✅ | [🔗](papers/2024_Yates_RuapehuSnow) |
+| Year | Reference | Network | Approach | Data | MSNoise | ✔ | Project |
+|------|-----------|---------|----------|------|---------|---|---------|
+| 2014 | [Lecocq et al., *SRL*](https://doi.org/10.1785/0220130073) | YA - Piton de la Fournaise, La Réunion | Foundation of MSNoise, CC-ZZ only | ✅ | ✅ | ❌ | [🔗](papers/2014_Lecocq_MSNoiseUndervolc) |
+| 2016 | [De Plaen et al., *GRL*](https://doi.org/10.1002/2016GL070078) | PF - Piton de la Fournaise, La Réunion | Single-station SC + AC, 4 frequency bands | ✅ | ✅ | ❌ | [🔗](papers/2016_DePlaen_PitonDeLaFournaise) |
+| 2019 | [De Plaen et al., *Front. Earth Sci.*](https://doi.org/10.3389/feart.2018.00251) | IV - Mt. Etna, Sicily, Italy | AC with PCC, velocity changes from volcanic activity | ❌ | ✅ | ❌ | [🔗](papers/2019_DePlaen_Etna) |
+| 2019 | [Yates et al., *GRL*](https://doi.org/10.1029/2018GL080580) | NZ - White Island (Whakaari), New Zealand | Single-station SC + AC, 2 frequency bands, volcanic/coseismic/seasonal separation | ✅ | ✅ | ❌ | [🔗](papers/2019_Yates_WhiteIsland) |
+| 2022 | [Wang et al., *EPSL*](https://doi.org/10.1016/j.epsl.2022.117443) | YH - Northern Hikurangi margin, New Zealand (offshore) | SC on OBS data, dv/v related to slow slip events, MWCS | ✅ | ✅ | ❌ | [🔗](papers/2022_Wang_Hikurangi) |
+| 2023 | [Yates et al., *GJI*](https://doi.org/10.1093/gji/ggac469) | YA, NZ - Piton de la Fournaise, La Réunion + Mt. Ruapehu, New Zealand | CC + hierarchical clustering to assess CCF similarity; 2 sites, 2 frequency bands each | ✅ | ✅ | ❌ | [🔗](papers/2023_Yates_ClusteringCCFs) |
+| 2024 | [Yates et al., *JGR Solid Earth*](https://doi.org/10.1029/2024JB029568) | NZ - Mt. Ruapehu, New Zealand | SC + cross-wavelet transform; seasonal snow influence on dv/v and spring eruption timing | ✅ | ✅ | ❌ | [🔗](papers/2024_Yates_RuapehuSnow) |
 <!-- PAPERS_END -->
 
 ## Contributing

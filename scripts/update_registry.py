@@ -31,6 +31,7 @@ MANUAL_DEFAULTS = {
     "network": "",
     "data_open": False,
     "uses_msnoise": True,
+    "validated": False,
 }
 
 
@@ -123,7 +124,7 @@ def build_entry(paper_dir: pathlib.Path) -> dict:
     key_order = [
         "id", "title", "authors", "year", "doi", "journal", "journal_abbrev",
         "volume", "pages", "network", "region", "period", "components", "cc_types",
-        "n_filters", "short_description", "msnoise_version_min", "levels_available", "data_open", "uses_msnoise",
+        "n_filters", "short_description", "msnoise_version_min", "levels_available", "data_open", "uses_msnoise", "validated",
         "data_source",
     ]
     return {k: entry[k] for k in key_order if k in entry}

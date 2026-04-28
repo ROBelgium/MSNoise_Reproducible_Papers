@@ -32,6 +32,7 @@ papers:
   levels_available: []
   data_open: true
   uses_msnoise: true
+  validated: false
   data_source: fdsn://http://ws.resif.fr
 - id: 2016_DePlaen_PitonDeLaFournaise
   title: Single-station monitoring of volcanoes using seismic ambient noise
@@ -67,6 +68,7 @@ papers:
   levels_available: []
   data_open: true
   uses_msnoise: true
+  validated: false
   data_source: fdsn://http://ws.resif.fr
 - id: 2019_DePlaen_Etna
   title: Temporal Changes of Seismic Velocity Caused by Volcanic Activity at Mt. Etna
@@ -101,6 +103,7 @@ papers:
   levels_available: []
   data_open: false
   uses_msnoise: true
+  validated: false
   data_source: ''
 - id: 2019_Yates_WhiteIsland
   title: Volcanic, Coseismic, and Seasonal Changes Detected at White Island (Whakaari)
@@ -137,6 +140,7 @@ papers:
   levels_available: []
   data_open: true
   uses_msnoise: true
+  validated: false
   data_source: fdsn://https://service.geonet.org.nz
 - id: 2022_Wang_Hikurangi
   title: Temporal velocity variations in the northern Hikurangi margin and the relation
@@ -176,6 +180,7 @@ papers:
   levels_available: []
   data_open: true
   uses_msnoise: true
+  validated: false
   data_source: fdsn://http://service.iris.edu
 - id: 2023_Yates_ClusteringCCFs
   title: 'Assessing similarity in continuous seismic cross-correlation functions using
@@ -213,6 +218,7 @@ papers:
   levels_available: []
   data_open: true
   uses_msnoise: true
+  validated: false
   data_source: fdsn://http://ws.resif.fr
 - id: 2024_Yates_RuapehuSnow
   title: Seasonal Snow Cycles and Their Possible Influence on Seismic Velocity Changes
@@ -250,4 +256,5 @@ papers:
   levels_available: []
   data_open: true
   uses_msnoise: true
+  validated: false
   data_source: fdsn://https://service.geonet.org.nz
