@@ -4,3 +4,4 @@ network: IV
 short_description: AC with PCC, velocity changes from volcanic activity
 msnoise_version_min: 2.0.0
 levels_available: []
+data_open: false

@@ -86,6 +86,8 @@ properties:
           items:
             type: string
             enum: [preprocess, cc, stack, mwcs, stretching, wavelet, dvv]
+        data_open:
+          type: boolean
         data_source:
           type: string
           description: "URI scheme: fdsn://<url> or sds://<path>"

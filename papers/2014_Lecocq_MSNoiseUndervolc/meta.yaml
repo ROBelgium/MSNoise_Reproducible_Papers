@@ -4,3 +4,4 @@ network: YA
 short_description: Foundation of MSNoise
 msnoise_version_min: 2.0.0
 levels_available: []
+data_open: true

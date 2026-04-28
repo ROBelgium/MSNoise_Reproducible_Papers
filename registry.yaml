@@ -30,6 +30,7 @@ papers:
   short_description: Foundation of MSNoise
   msnoise_version_min: 2.0.0
   levels_available: []
+  data_open: true
   data_source: fdsn://http://ws.resif.fr
 - id: 2016_DePlaen_PitonDeLaFournaise
   title: Single-station monitoring of volcanoes using seismic ambient noise
@@ -63,6 +64,7 @@ papers:
   short_description: Single-station SC + AC, 4 frequency bands
   msnoise_version_min: 2.0.0
   levels_available: []
+  data_open: true
   data_source: fdsn://http://ws.resif.fr
 - id: 2019_DePlaen_Etna
   title: Temporal Changes of Seismic Velocity Caused by Volcanic Activity at Mt. Etna
@@ -95,4 +97,5 @@ papers:
   short_description: AC with PCC, velocity changes from volcanic activity
   msnoise_version_min: 2.0.0
   levels_available: []
+  data_open: false
   data_source: ''
