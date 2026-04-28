@@ -45,6 +45,9 @@ properties:
           pattern: "^10\\."
         journal:
           type: string
+        journal_abbrev:
+          type: string
+          description: "Short journal abbreviation for display (e.g. SRL, GRL)"
         volume:
           type: [integer, "null"]
         pages:
@@ -72,6 +75,9 @@ properties:
         n_filters:
           type: integer
           minimum: 1
+        short_description:
+          type: string
+          description: "One-line approach summary for the papers table"
         msnoise_version_min:
           type: string
           pattern: "^\\d+\\.\\d+\\.\\d+$"

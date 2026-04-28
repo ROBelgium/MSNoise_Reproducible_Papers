@@ -16,7 +16,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install jsonschema pyyaml jsonschema[format]
+        run: pip install jsonschema pyyaml "jsonschema[format]" bibtexparser
 
       - name: Validate YAML files against schemas
         run: |
@@ -69,3 +69,12 @@ jobs:
               print("All checks passed.")
           sys.exit(0 if ok else 1)
           EOF
+
+      - name: Check registry.yaml is up to date
+        run: |
+          python scripts/update_registry.py
+          git diff --exit-code registry.yaml || (
+            echo "ERROR: registry.yaml is out of date."
+            echo "Run: python scripts/update_registry.py"
+            exit 1
+          )
