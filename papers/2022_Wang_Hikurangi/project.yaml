@@ -41,6 +41,12 @@ data_sources:
     network: "YH"
     channels: "BH?,HH?,EH?"
 
+stations:
+  # LOBS = Lamont broadband OBS; EOBS = ERI Tokyo short-period OBS
+  # LOBS3 on subducting plate (excluded from average but included for reference)
+  # LOBS6 excluded (horizontal orientation undetermined)
+  station_endpoint: "http://service.iris.edu/fdsnws/station/1/query?network=YH&station=LOBS3,LOBS7,LOBS8,LOBS9,EOBS1,EOBS2,EOBS3,EOBS4,EOBS5&level=response"
+
 # ── LOBS (broadband) — 14400 s windows ────────────────────────────────────
 
 cc_1:
