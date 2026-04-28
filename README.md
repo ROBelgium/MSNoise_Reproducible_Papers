@@ -1,1 +1,42 @@
-# MSNoise_Reproducible_Papers
+# MSNoise Reproducible Papers
+
+A curated registry of published studies that used [MSNoise](https://github.com/ROBelgium/MSNoise), or NOT!
+Each paper comes with a fully documented configuration and (where available) archived data bundles
+so results can be reproduced or used as a starting point for new studies.
+
+## What's in each paper folder
+
+| File | Purpose |
+|------|---------|
+| `project.yaml` | Complete MSNoise configuration — importable directly via `msnoise db init --from-yaml` |
+| `citation.bib` | BibTeX reference |
+| `README.md` | Paper summary, network/period notes, known caveats |
+| `bundle_pointer.yaml` | *(when available)* URLs + checksums for pre-computed data bundles |
+| `notebooks/` | *(when available)* Jupytext notebooks to reproduce the figures |
+
+## How to use a configuration
+
+```bash
+# 1. Clone this registry
+git clone https://github.com/ROBelgium/MSNoise_Reproducible_Papers
+
+# 2. Create a new MSNoise project and import a config
+mkdir my_project && cd my_project
+msnoise db init --from-yaml ../MSNoise_Reproducible_Papers/papers/2014_Lecocq_MSNoiseUndervolc/project.yaml
+
+# 3. Run from scratch (requires FDSN access for example) or import a bundle
+msnoise run preprocess
+```
+
+## Papers
+
+| Year | Reference | Network | Approach |
+|------|-----------|---------|----------|
+| 2014 | [Lecocq, Caudron & Brenguier, *SRL*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA — Piton de la Fournaise | Inter-station CC, ZZ |
+| 2016 | [De Plaen et al., *GRL*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF — Piton de la Fournaise | Single-station SC + AC, 4 frequency bands |
+
+## Contributing
+
+To add a paper, open a PR with a new folder under `papers/` containing at minimum
+`project.yaml`, `citation.bib`, and `README.md`.
+The CI will check that the folder is registered in `registry.yaml` and that all required files are present.
