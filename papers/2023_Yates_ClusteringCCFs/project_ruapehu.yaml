@@ -63,16 +63,12 @@ refstack_1:
 
 stretching_1:
   after: [stack_1, refstack_1]
-  # §2.3: dynamic lag start = interstation_distance / 500 m/s
-  #       width = 40 s for 0.2–0.7 Hz band
-  # Static approximation for FWVZ-WPVZ (~6 km): minlag ≈ 12 s
-  # For other pairs adjust minlag accordingly; dynamic mode not yet in MSNoise
+  # §2.3: dynamic lag start = interstation_distance / 500 m/s, width = 40 s
   stretching_min: 0.1
   stretching_max: 1.0
   stretching_nsteps: 500
-  dtt_lag: "static"
-  dtt_v: 1.0
-  dtt_minlag: 12.0                  # approx. 6000 m / 500 m/s
+  dtt_lag: "dynamic"
+  dtt_v: 0.5                        # 500 m/s minimum ballistic wave speed
   dtt_width: 40.0
   dtt_sides: "both"
 
@@ -109,13 +105,11 @@ refstack_2:
 
 stretching_2:
   after: [stack_2, refstack_2]
-  # §2.3: dynamic lag, width = 20 s for 1.8–4.0 Hz
-  # Static approx for FWVZ-WPVZ: minlag ≈ 12 s
+  # §2.3: dynamic lag start = interstation_distance / 500 m/s, width = 20 s
   stretching_min: 0.1
   stretching_max: 1.0
   stretching_nsteps: 500
-  dtt_lag: "static"
-  dtt_v: 1.0
-  dtt_minlag: 12.0
+  dtt_lag: "dynamic"
+  dtt_v: 0.5
   dtt_width: 20.0
   dtt_sides: "both"

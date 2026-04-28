@@ -23,7 +23,7 @@ Two sites, two frequency bands each.
 - PdF: no instrument response removal (flat BB response); Ruapehu: response removal applied
 - PdF reversal note: DRZ and FWVZ (Ruapehu) had reversed polarity — flip waveforms before import
 - Pipeline ends at `stretching`; no mwcs/dvv steps
-- **Dynamic lag window** (Ruapehu): `dtt_minlag = interstation_distance / 500 m/s` — not natively supported in MSNoise; static approximation used (~12 s for FWVZ-WPVZ at 6 km)
+- **Dynamic lag window** (Ruapehu): `dtt_lag=dynamic`, `dtt_v=0.5` (500 m/s minimum ballistic wave speed)
 - Clustering notebook: [github.com/asyates/hclusterCCFs](https://github.com/asyates/hclusterCCFs)
 
 ## Data access
