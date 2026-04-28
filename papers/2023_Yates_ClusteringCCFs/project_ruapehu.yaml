@@ -4,9 +4,7 @@ msnoise_project_version: 1
 # Network: NZ (GeoNet) — 9 short-period (1 Hz) + 2 broadband stations
 # Available via GeoNet (doi:10.21420/G19Y-9D40)
 # Period: 2005-01-01 – 2008-12-31 (encompasses 2006 + 2007 eruptions)
-# Note: DRZ and FWVZ had reversed polarity — manually corrected before import
-# Note: stretching uses dynamic lag (distance/500 m/s) — not native MSNoise;
-#       static approximation used here (FWVZ-WPVZ: ~6 km → start ~12 s)
+# Note: DRZ and FWVZ had reversed polarity — manually correct before import
 
 global_1:
   startdate: "2005-01-01"
@@ -21,13 +19,12 @@ preprocess_1:
   preprocess_highpass: 0.01
   preprocess_lowpass: 10.0
   preprocess_components: "E,N,Z"
-  # §2.1: "instrument response correction is then applied to all stations"
   remove_response: "Y"
 
 data_sources:
   - uri: "fdsn://https://service.geonet.org.nz"
     network: "NZ"
-    channels: "?H?,?P?"             # mix of HH (BB) and EH/SP channels
+    channels: "?H?,?P?"
 
 # ── Band 1: 0.2–0.7 Hz ───────────────────────────────────────────────────
 
@@ -36,7 +33,7 @@ cc_1:
   maxlag: 120.0
   corr_duration: 1800.0
   overlap: 0.0
-  winsorizing: -1                   # 1-bit normalization
+  winsorizing: -1
   whitening: "A"
   components_to_compute: "ZZ"
   keep_days: "Y"
@@ -56,7 +53,6 @@ stack_1:
 
 refstack_1:
   after: filter_1
-  # §2.5: "reference function from the entire data period" for Ruapehu
   ref_begin: "2005-01-01"
   ref_end: "2008-12-31"
   stack_method: linear
@@ -64,13 +60,16 @@ refstack_1:
 stretching_1:
   after: [stack_1, refstack_1]
   # §2.3: dynamic lag start = interstation_distance / 500 m/s, width = 40 s
-  stretching_min: 0.1
-  stretching_max: 1.0
-  stretching_nsteps: 500
-  dtt_lag: "dynamic"
-  dtt_v: 0.5                        # 500 m/s minimum ballistic wave speed
-  dtt_width: 40.0
-  dtt_sides: "both"
+  stretching_lag: "dynamic"
+  stretching_v: 0.5                 # 500 m/s minimum ballistic wave speed
+  stretching_minlag: 0.0            # unused when lag=dynamic (set by v)
+  stretching_width: 40.0
+  stretching_sides: "both"
+  stretching_max: 0.01
+  stretching_nsteps: 1000
+
+stretching_dvv_1:
+  after: stretching_1
 
 # ── Band 2: 1.8–4.0 Hz ───────────────────────────────────────────────────
 
@@ -79,7 +78,7 @@ cc_2:
   maxlag: 120.0
   corr_duration: 1800.0
   overlap: 0.0
-  winsorizing: -1                   # 1-bit normalization (§2.2)
+  winsorizing: -1
   whitening: "A"
   components_to_compute: "ZZ"
   keep_days: "Y"
@@ -105,11 +104,14 @@ refstack_2:
 
 stretching_2:
   after: [stack_2, refstack_2]
-  # §2.3: dynamic lag start = interstation_distance / 500 m/s, width = 20 s
-  stretching_min: 0.1
-  stretching_max: 1.0
-  stretching_nsteps: 500
-  dtt_lag: "dynamic"
-  dtt_v: 0.5
-  dtt_width: 20.0
-  dtt_sides: "both"
+  # §2.3: dynamic lag, width = 20 s for 1.8–4.0 Hz
+  stretching_lag: "dynamic"
+  stretching_v: 0.5
+  stretching_minlag: 0.0            # unused when lag=dynamic
+  stretching_width: 20.0
+  stretching_sides: "both"
+  stretching_max: 0.01
+  stretching_nsteps: 1000
+
+stretching_dvv_2:
+  after: stretching_2
