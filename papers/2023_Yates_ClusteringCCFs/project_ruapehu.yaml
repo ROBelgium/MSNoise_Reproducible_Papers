@@ -22,7 +22,8 @@ preprocess_1:
   remove_response: "Y"
 
 data_sources:
-  - uri: "fdsn://https://service.geonet.org.nz"
+  - name: geonet-fdsn
+    uri: "fdsn://https://service.geonet.org.nz"
     network: "NZ"
     channels: "?H?,?P?"
 

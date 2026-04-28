@@ -86,7 +86,7 @@ mwcs_dtt_dvv_1:
 # Set uri to the root of your SDS archive before running scan_archive.
 
 data_sources:
-  - name: local
+  - name: iv-local
     uri: ""
     data_structure: SDS
     auth_env: MSNOISE

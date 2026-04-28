@@ -28,7 +28,8 @@ preprocess_1:
   remove_response: "N"
 
 data_sources:
-  - uri: "fdsn://http://ws.resif.fr"
+  - name: resif-fdsn
+    uri: "fdsn://http://ws.resif.fr"
     network: "YA"
     channels: "HH?"
 

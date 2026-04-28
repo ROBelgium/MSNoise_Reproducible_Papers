@@ -48,6 +48,7 @@ jobs:
                        "--from-yaml", str(yaml_path.resolve())],
                       cwd=tmpdir,
                       capture_output=True, text=True,
+                  input="n\n",
                   )
                   print(result.stdout)
                   if result.returncode != 0:

@@ -37,7 +37,8 @@ preprocess_1:
   remove_response: "Y"             # OBS instruments require response removal
 
 data_sources:
-  - uri: "fdsn://http://service.iris.edu"
+  - name: iris-fdsn
+    uri: "fdsn://http://service.iris.edu"
     network: "YH"
     channels: "BH?,HH?,EH?"
 
@@ -89,8 +90,8 @@ mwcs_1:
   after: [stack_1, refstack_1]
   # §3: "20-second moving windows with a 4-second step (80% overlap)"
   # §3: "frequency band of 2.5-14 s" = 0.071–0.4 Hz
-  mwcs_low: 0.071                   # 1/14 s
-  mwcs_high: 0.4                    # 1/2.5 s
+  freqmin: 0.071                   # 1/14 s
+  freqmax: 0.4                    # 1/2.5 s
   mwcs_wlen: 20.0
   mwcs_step: 4.0
 
@@ -144,8 +145,8 @@ refstack_2:
 
 mwcs_2:
   after: [stack_2, refstack_2]
-  mwcs_low: 0.071
-  mwcs_high: 0.4
+  freqmin: 0.071
+  freqmax: 0.4
   mwcs_wlen: 20.0
   mwcs_step: 4.0
 

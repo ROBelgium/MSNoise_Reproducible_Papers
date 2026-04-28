@@ -30,7 +30,8 @@ preprocess_1:
   remove_response: "N"
 
 data_sources:
-  - uri: "fdsn://https://service.geonet.org.nz"
+  - name: geonet-fdsn
+    uri: "fdsn://https://service.geonet.org.nz"
     network: "NZ"
     channels: "HH?,EH?"
 
@@ -78,8 +79,8 @@ wavelet_1:
   after: [stack_1, refstack_1]
   # §2.4: Morlet wavelet, 0.1–8.0 Hz
   wavelet_type: "('Morlet',6.)"
-  wct_freqmin: 0.1
-  wct_freqmax: 8.0
+  wct_dtt_freqmin: 0.1
+  wct_dtt_freqmax: 8.0
   wct_ns: 5                         # §2.4: Gaussian smoothing, 5-scale boxcar
   wct_nt: 1                         # temporal smoothing (std≈1.5 s in paper)
   wct_vpo: 12
@@ -90,8 +91,8 @@ wavelet_1:
 wavelet_dtt_1:
   after: wavelet_1
   # §2.4: coda start=5 s, dynamic end = 20 cycles/freq (max 120 s)
-  wct_freqmin: 0.1
-  wct_freqmax: 8.0
+  wct_dtt_freqmin: 0.1
+  wct_dtt_freqmax: 8.0
   wct_minlag: 5.0                   # §2.4: "minimum lag time for the coda as 5 s"
   wct_lag: "dynamic"                # §2.4: "20 cycles at a given frequency"
   wct_codacycles: 20

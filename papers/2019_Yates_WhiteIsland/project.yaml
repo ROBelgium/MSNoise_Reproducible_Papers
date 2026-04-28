@@ -25,7 +25,8 @@ preprocess_1:
   remove_response: "N"
 
 data_sources:
-  - uri: "fdsn://https://service.geonet.org.nz"
+  - name: geonet-fdsn
+    uri: "fdsn://https://service.geonet.org.nz"
     network: "NZ"
     channels: "HH?"
 
@@ -69,8 +70,8 @@ refstack_1:
 mwcs_1:
   after: [stack_1, refstack_1]
   # Thesis Table A.6: MWCS regression band 0.14–0.96 Hz
-  mwcs_low: 0.14
-  mwcs_high: 0.96
+  freqmin: 0.14
+  freqmax: 0.96
   mwcs_wlen: 16.0                   # 16-s window (thesis Table A.6)
   mwcs_step: 4.0                    # 4-s step (thesis Table A.6)
 
@@ -83,7 +84,7 @@ mwcs_dtt_1:
   dtt_width: 60.0                   # window width → maxlag = 20+60 = 80 s
   dtt_sides: "both"
   dtt_mincoh: 0.8
-  dtt_maxdt: 0.4
+  dtt_maxdtt: 0.4
   dtt_maxerr: 0.1
 
 mwcs_dtt_dvv_1:
@@ -125,8 +126,8 @@ refstack_2:
 mwcs_2:
   after: [stack_2, refstack_2]
   # Thesis Table A.7: MWCS regression band 1.04–1.96 Hz
-  mwcs_low: 1.04
-  mwcs_high: 1.96
+  freqmin: 1.04
+  freqmax: 1.96
   mwcs_wlen: 12.0                   # 12-s window (thesis Table A.7)
   mwcs_step: 4.0
 
@@ -139,7 +140,7 @@ mwcs_dtt_2:
   dtt_width: 30.0                   # window width → maxlag = 10+30 = 40 s
   dtt_sides: "both"
   dtt_mincoh: 0.6
-  dtt_maxdt: 0.2
+  dtt_maxdtt: 0.2
   dtt_maxerr: 0.1
 
 mwcs_dtt_dvv_2:
