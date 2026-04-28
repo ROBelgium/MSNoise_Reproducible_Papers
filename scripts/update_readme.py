@@ -26,8 +26,8 @@ def fmt_authors(authors: list) -> str:
 
 def build_table(papers: list) -> str:
     rows = [
-        "| Year | Reference | Network | Approach | Data | MSNoise | ✔ | Project |",
-        "|------|-----------|---------|----------|------|---------|---|---------|",
+        "| Year | Reference | Network | Approach | Data | MSNoise | E2E ✔ | Project |",
+        "|------|-----------|---------|----------|------|---------|-------|---------|",
     ]
     for p in sorted(papers, key=lambda x: x["year"]):
         authors = fmt_authors(p["authors"])
