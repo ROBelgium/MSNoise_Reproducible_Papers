@@ -33,9 +33,9 @@ msnoise run preprocess
 <!-- PAPERS_START -->
 | Year | Reference | Network | Approach |
 |------|-----------|---------|----------|
-| 2014 | [Lecocq et al., *Seismological Research Letters*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA - Piton de la Fournaise, La Réunion |  |
-| 2016 | [De Plaen et al., *Geophysical Research Letters*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF - Piton de la Fournaise, La Réunion |  |
-| 2019 | [De Plaen et al., *Frontiers in Earth Science*](papers/2019_DePlaen_Etna/) |  - Sicily, Italy |  |
+| 2014 | [Lecocq et al., *SRL*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA - Piton de la Fournaise, La Réunion | Foundation of MSNoise |
+| 2016 | [De Plaen et al., *GRL*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF - Piton de la Fournaise, La Réunion | Single-station SC + AC, 4 frequency bands |
+| 2019 | [De Plaen et al., *Front. Earth Sci.*](papers/2019_DePlaen_Etna/) |  - Mt. Etna, Sicily, Italy | AC with PCC, velocity changes from volcanic activity |
 <!-- PAPERS_END -->
 
 ## Contributing
