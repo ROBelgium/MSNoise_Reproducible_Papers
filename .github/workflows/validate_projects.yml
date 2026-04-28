@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'papers/**/project*.yaml'
+      - 'scripts/check_projects.py'
       - '.github/workflows/validate_projects.yml'
   pull_request:
     paths:
       - 'papers/**/project*.yaml'
+      - 'scripts/check_projects.py'
       - '.github/workflows/validate_projects.yml'
 
 jobs:
@@ -28,41 +30,4 @@ jobs:
           pip install "git+https://github.com/ROBelgium/MSNoise.git@master#egg=msnoise"
 
       - name: Run db init for every project*.yaml
-        run: |
-          python3 - <<'PYEOF'
-          import pathlib, subprocess, tempfile, sys
-
-          root = pathlib.Path(".")
-          yamls = sorted(root.glob("papers/**/project*.yaml"))
-
-          if not yamls:
-              print("No project*.yaml files found.")
-              sys.exit(1)
-
-          failures = []
-          for yaml_path in yamls:
-              print(f"\n── {yaml_path} ──")
-              with tempfile.TemporaryDirectory() as tmpdir:
-                  result = subprocess.run(
-                      ["msnoise", "db", "init", "--tech", "1",
-                       "--from-yaml", str(yaml_path.resolve())],
-                      cwd=tmpdir,
-                      capture_output=True, text=True,
-                  input="n\n",
-                  )
-                  print(result.stdout)
-                  if result.returncode != 0:
-                      print(result.stderr)
-                      failures.append(str(yaml_path))
-                      print(f"FAIL: {yaml_path}")
-                  else:
-                      print(f"OK:   {yaml_path}")
-
-          if failures:
-              print(f"\n{len(failures)} failure(s):")
-              for f in failures:
-                  print(f"  {f}")
-              sys.exit(1)
-          else:
-              print(f"\nAll {len(yamls)} project file(s) passed.")
-          PYEOF
+        run: python scripts/check_projects.py
