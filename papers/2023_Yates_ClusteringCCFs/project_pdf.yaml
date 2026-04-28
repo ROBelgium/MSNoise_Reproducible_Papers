@@ -1,0 +1,129 @@
+msnoise_project_version: 1
+# Yates et al. (2023) - Geophys. J. Int. doi:10.1093/gji/ggac469
+# "Assessing similarity in continuous seismic cross-correlation functions
+#  using hierarchical clustering: application to Ruapehu and Piton de la
+#  Fournaise volcanoes"
+# ── Site 1: Piton de la Fournaise ──────────────────────────────────────────
+# Network: YA (UnderVolc, IPGP) — 21 stations (15 temp BB + 6 permanent BB)
+# Available via RESIF (doi:10.18715/REUNION.OVPF)
+# Period: 2009-09-01 – 2011-05-01 (UnderVolc deployment)
+# Pipeline: preprocess → cc → filter → stack → refstack → stretching
+# Note: hierarchical clustering (main analysis) performed externally with
+#       scipy.cluster.hierarchy on MSNoise stack outputs
+# Note: 1-bit normalization = winsorizing: -1 in MSNoise
+
+global_1:
+  startdate: "2009-09-01"
+  enddate: "2011-05-01"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  # §2.2: "bandpassed between 0.01 and 10.0 Hz and decimated to 25 Hz"
+  cc_sampling_rate: 25.0
+  resampling_method: Decimate
+  preprocess_highpass: 0.01
+  preprocess_lowpass: 10.0
+  # Primary analysis: Z-component inter-station pairs
+  # Supplementary: also EN, EZ, NZ, EE, NN, ZZ single-station (Figs S6-S9)
+  preprocess_components: "E,N,Z"
+  # §2.2: "No instrument response correction is applied" (flat response BB)
+  remove_response: "N"
+
+data_sources:
+  - uri: "fdsn://http://ws.resif.fr"
+    network: "YA"
+    channels: "HH?"
+
+# ── Band 1: 0.1–1.0 Hz ───────────────────────────────────────────────────
+
+cc_1:
+  after: preprocess_1
+  maxlag: 120.0
+  corr_duration: 1800.0             # 30-min windows (§2.2)
+  overlap: 0.0
+  winsorizing: -1                   # 1-bit normalization (§2.2)
+  whitening: "A"                    # spectral whitening applied to all (§2.2)
+  components_to_compute: "ZZ"
+  # Supplementary single-station: add EN,EZ,NZ,EE,NN if needed
+  components_to_compute_single_station: "EN,EZ,NZ,EE,NN,ZZ"
+  keep_days: "Y"
+
+filter_1:
+  after: cc_1
+  # §2.2: "whitened between both 0.1–1.0 Hz" (defines effective band)
+  freqmin: 0.1
+  freqmax: 1.0
+  CC: "Y"
+  SC: "Y"
+  AC: "Y"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  mov_stack: "(('10D','1D'))"       # 10-day stacks (§2.2)
+
+refstack_1:
+  after: filter_1
+  # §2.5: "reference period as used by Obermann et al. (2013)"
+  ref_begin: "2010-06-01"
+  ref_end: "2010-09-01"
+  stack_method: linear
+
+stretching_1:
+  after: [stack_1, refstack_1]
+  # §2.5: lag window [10–45] s, ±1% max stretch
+  # Note: matches clustering lag window for PdF 0.1–1.0 Hz band
+  stretching_min: 0.1
+  stretching_max: 1.0
+  stretching_nsteps: 500
+  dtt_lag: "static"
+  dtt_v: 1.0
+  dtt_minlag: 10.0
+  dtt_width: 35.0                   # → maxlag = 10 + 35 = 45 s
+  dtt_sides: "both"
+
+# ── Band 2: 1.0–2.0 Hz ───────────────────────────────────────────────────
+
+cc_2:
+  after: preprocess_1
+  maxlag: 120.0
+  corr_duration: 1800.0
+  overlap: 0.0
+  winsorizing: -1                   # 1-bit normalization (§2.2)
+  whitening: "A"
+  components_to_compute: "ZZ"
+  components_to_compute_single_station: "EN,EZ,NZ,EE,NN,ZZ"
+  keep_days: "Y"
+
+filter_2:
+  after: cc_2
+  freqmin: 1.0
+  freqmax: 2.0
+  CC: "Y"
+  SC: "Y"
+  AC: "Y"
+
+stack_2:
+  after: filter_2
+  stack_method: linear
+  mov_stack: "(('10D','1D'))"
+
+refstack_2:
+  after: filter_2
+  ref_begin: "2010-06-01"
+  ref_end: "2010-09-01"
+  stack_method: linear
+
+stretching_2:
+  after: [stack_2, refstack_2]
+  # §2.5: lag window [10–30] s for 1.0–2.0 Hz band
+  stretching_min: 0.1
+  stretching_max: 1.0
+  stretching_nsteps: 500
+  dtt_lag: "static"
+  dtt_v: 1.0
+  dtt_minlag: 10.0
+  dtt_width: 20.0                   # → maxlag = 10 + 20 = 30 s
+  dtt_sides: "both"

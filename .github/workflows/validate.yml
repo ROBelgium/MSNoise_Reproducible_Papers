@@ -64,10 +64,13 @@ jobs:
               ok = False
           for pid in ids & folders:
               paper_dir = pathlib.Path("papers") / pid
-              for required in ("README.md", "citation.bib", "project.yaml", "meta.yaml"):
+              for required in ("README.md", "citation.bib", "meta.yaml"):
                   if not (paper_dir / required).exists():
                       print(f"ERROR: {pid} missing {required}")
                       ok = False
+              if not list(paper_dir.glob("project*.yaml")):
+                  print(f"ERROR: {pid} missing project.yaml or project_*.yaml")
+                  ok = False
           if ok:
               print("All checks passed.")
           sys.exit(0 if ok else 1)

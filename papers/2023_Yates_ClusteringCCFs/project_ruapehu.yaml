@@ -1,0 +1,121 @@
+msnoise_project_version: 1
+# Yates et al. (2023) - Geophys. J. Int. doi:10.1093/gji/ggac469
+# ── Site 2: Mt. Ruapehu ────────────────────────────────────────────────────
+# Network: NZ (GeoNet) — 9 short-period (1 Hz) + 2 broadband stations
+# Available via GeoNet (doi:10.21420/G19Y-9D40)
+# Period: 2005-01-01 – 2008-12-31 (encompasses 2006 + 2007 eruptions)
+# Note: DRZ and FWVZ had reversed polarity — manually corrected before import
+# Note: stretching uses dynamic lag (distance/500 m/s) — not native MSNoise;
+#       static approximation used here (FWVZ-WPVZ: ~6 km → start ~12 s)
+
+global_1:
+  startdate: "2005-01-01"
+  enddate: "2008-12-31"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  cc_sampling_rate: 25.0
+  resampling_method: Decimate
+  preprocess_highpass: 0.01
+  preprocess_lowpass: 10.0
+  preprocess_components: "E,N,Z"
+  # §2.1: "instrument response correction is then applied to all stations"
+  remove_response: "Y"
+
+data_sources:
+  - uri: "fdsn://https://service.geonet.org.nz"
+    network: "NZ"
+    channels: "?H?,?P?"             # mix of HH (BB) and EH/SP channels
+
+# ── Band 1: 0.2–0.7 Hz ───────────────────────────────────────────────────
+
+cc_1:
+  after: preprocess_1
+  maxlag: 120.0
+  corr_duration: 1800.0
+  overlap: 0.0
+  winsorizing: -1                   # 1-bit normalization
+  whitening: "A"
+  components_to_compute: "ZZ"
+  keep_days: "Y"
+
+filter_1:
+  after: cc_1
+  freqmin: 0.2
+  freqmax: 0.7
+  CC: "Y"
+  SC: "N"
+  AC: "N"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  mov_stack: "(('10D','1D'))"
+
+refstack_1:
+  after: filter_1
+  # §2.5: "reference function from the entire data period" for Ruapehu
+  ref_begin: "2005-01-01"
+  ref_end: "2008-12-31"
+  stack_method: linear
+
+stretching_1:
+  after: [stack_1, refstack_1]
+  # §2.3: dynamic lag start = interstation_distance / 500 m/s
+  #       width = 40 s for 0.2–0.7 Hz band
+  # Static approximation for FWVZ-WPVZ (~6 km): minlag ≈ 12 s
+  # For other pairs adjust minlag accordingly; dynamic mode not yet in MSNoise
+  stretching_min: 0.1
+  stretching_max: 1.0
+  stretching_nsteps: 500
+  dtt_lag: "static"
+  dtt_v: 1.0
+  dtt_minlag: 12.0                  # approx. 6000 m / 500 m/s
+  dtt_width: 40.0
+  dtt_sides: "both"
+
+# ── Band 2: 1.8–4.0 Hz ───────────────────────────────────────────────────
+
+cc_2:
+  after: preprocess_1
+  maxlag: 120.0
+  corr_duration: 1800.0
+  overlap: 0.0
+  winsorizing: -1                   # 1-bit normalization (§2.2)
+  whitening: "A"
+  components_to_compute: "ZZ"
+  keep_days: "Y"
+
+filter_2:
+  after: cc_2
+  freqmin: 1.8
+  freqmax: 4.0
+  CC: "Y"
+  SC: "N"
+  AC: "N"
+
+stack_2:
+  after: filter_2
+  stack_method: linear
+  mov_stack: "(('10D','1D'))"
+
+refstack_2:
+  after: filter_2
+  ref_begin: "2005-01-01"
+  ref_end: "2008-12-31"
+  stack_method: linear
+
+stretching_2:
+  after: [stack_2, refstack_2]
+  # §2.3: dynamic lag, width = 20 s for 1.8–4.0 Hz
+  # Static approx for FWVZ-WPVZ: minlag ≈ 12 s
+  stretching_min: 0.1
+  stretching_max: 1.0
+  stretching_nsteps: 500
+  dtt_lag: "static"
+  dtt_v: 1.0
+  dtt_minlag: 12.0
+  dtt_width: 20.0
+  dtt_sides: "both"

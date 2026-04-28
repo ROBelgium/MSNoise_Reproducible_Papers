@@ -108,7 +108,8 @@ def parse_meta(path: pathlib.Path) -> dict:
 def build_entry(paper_dir: pathlib.Path) -> dict:
     pid = paper_dir.name
     bib = parse_bib(paper_dir / "citation.bib")
-    proj = parse_project(paper_dir / "project.yaml")
+    project_files = sorted(paper_dir.glob("project*.yaml"))
+    proj = parse_project(project_files[0])  # first match: project.yaml or project_*.yaml
     meta = parse_meta(paper_dir / "meta.yaml")
 
     entry = {"id": pid}
@@ -139,8 +140,9 @@ def update():
     papers = []
     ok = True
     for d in paper_dirs:
-        if not (d / "citation.bib").exists() or not (d / "project.yaml").exists():
-            print(f"SKIP {d.name} — missing citation.bib or project.yaml")
+        project_files = sorted(d.glob("project*.yaml"))
+        if not (d / "citation.bib").exists() or not project_files:
+            print(f"SKIP {d.name} — missing citation.bib or project*.yaml")
             continue
         if not (d / "meta.yaml").exists():
             print(f"WARN {d.name} — missing meta.yaml, using defaults")

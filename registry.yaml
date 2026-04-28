@@ -138,3 +138,40 @@ papers:
   data_open: true
   uses_msnoise: true
   data_source: fdsn://https://service.geonet.org.nz
+- id: 2023_Yates_ClusteringCCFs
+  title: 'Assessing similarity in continuous seismic cross-correlation functions using
+    hierarchical clustering: application to Ruapehu and Piton de la Fournaise volcanoes'
+  authors:
+  - Yates, A.
+  - Caudron, C.
+  - Lesage, P.
+  - Mordret, A.
+  - Lecocq, T.
+  - Soubestre, J.
+  year: 2023
+  doi: 10.1093/gji/ggac469
+  journal: Geophysical Journal International
+  journal_abbrev: GJI
+  volume: 233
+  pages: 472-489
+  network: YA, NZ
+  region: Piton de la Fournaise, La Réunion + Mt. Ruapehu, New Zealand
+  period:
+  - '2009-09-01'
+  - '2011-05-01'
+  components:
+  - EE
+  - EN
+  - EZ
+  - NN
+  - NZ
+  - ZZ
+  cc_types: []
+  n_filters: 2
+  short_description: CC + hierarchical clustering to assess CCF similarity; 2 sites,
+    2 frequency bands each
+  msnoise_version_min: 2.0.0
+  levels_available: []
+  data_open: true
+  uses_msnoise: true
+  data_source: fdsn://http://ws.resif.fr
