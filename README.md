@@ -35,6 +35,7 @@ msnoise run preprocess
 |------|-----------|---------|----------|
 | 2014 | [Lecocq et al., *Seismological Research Letters*](papers/2014_Lecocq_MSNoiseUndervolc/) | YA - Piton de la Fournaise, La Réunion |  |
 | 2016 | [De Plaen et al., *Geophysical Research Letters*](papers/2016_DePlaen_PitonDeLaFournaise/) | PF - Piton de la Fournaise, La Réunion |  |
+| 2019 | [De Plaen et al., *Frontiers in Earth Science*](papers/2019_DePlaen_Etna/) |  -  |  |
 <!-- PAPERS_END -->
 
 ## Contributing

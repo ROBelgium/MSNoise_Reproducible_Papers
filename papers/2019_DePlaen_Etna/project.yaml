@@ -1,0 +1,117 @@
+msnoise_project_version: 1
+# De Plaen et al. (2019) - Front. Earth Sci. 6:251
+# Stations: IV.ECPN, IV.EPDN, IV.EPLC  (Etna, broadband, 100 Hz)
+# Period:   2013-04-01 - 2014-10-31
+
+global_1:
+  startdate: "2013-04-01"
+  enddate: "2014-10-31"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  cc_sampling_rate: 20.0
+  preprocess_highpass: 0.01
+  preprocess_lowpass: 8.0
+  preprocess_components: "E,N,Z"
+  resampling_method: Decimate
+  remove_response: "N"
+
+cc_1:
+  after: preprocess_1
+  cc_sampling_rate: 20.0
+  maxlag: 120.0
+  corr_duration: 1800.0
+  winsorizing: 0.0
+  whitening: "N"
+  components_to_compute: ""
+  components_to_compute_single_station: "ZZ,EE,NN"
+  cc_type_single_station_AC: PCC
+  keep_all: "Y"
+  keep_days: "Y"
+
+filter_1:
+  after: cc_1
+  freqmin: 1.0
+  freqmax: 2.0
+  CC: "N"
+  SC: "N"
+  AC: "Y"
+  used: "Y"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  mov_stack: "(('2D','1D'))"
+  wienerfilt: "N"
+
+refstack_1:
+  after: filter_1        # sibling of stack_1, not child
+  ref_begin: "2013-04-01"
+  ref_end: "2014-10-31"
+  stack_method: linear
+  wienerfilt: "N"
+
+mwcs_1:
+  after: [stack_1, refstack_1]   # requires both parents (join condition, ARCHITECTURE §1 A1)
+  freqmin: 1.0
+  freqmax: 2.0
+  mwcs_wlen: 10.0
+  mwcs_step: 2.0
+
+mwcs_dtt_1:
+  after: mwcs_1
+  dtt_minlag: 5.0
+  dtt_width: 30.0
+  dtt_lag: static
+  dtt_sides: both
+  dtt_mincoh: 0.6
+  dtt_maxerr: 0.1
+  dtt_maxdtt: 1.0
+
+mwcs_dtt_dvv_1:
+  after: mwcs_dtt_1
+  dvv_split_pair_type: "Y"
+  dvv_split_components: "Y"
+  dvv_ac_value: m0
+  dvv_ac_error: em0
+  dvv_weighted_mean: "Y"
+  dvv_trimmed_mean: "Y"
+  dvv_output_percent: "Y"
+
+# ── Data source ────────────────────────────────────────────────────────────
+# Local SDS archive — INGV Etna network (IV), data not publicly available.
+# Set uri to the root of your SDS archive before running scan_archive.
+
+data_sources:
+  - name: local
+    uri: ""
+    data_structure: SDS
+    auth_env: MSNOISE
+
+stations:
+  # Approximate coordinates from Fig. 1 (WGS84).
+  # Replace with exact values from StationXML once available
+  # (e.g. msnoise utils import-stationxml inventory/IV.ECPN.xml).
+  - net: IV
+    sta: ECPN
+    X: 14.9905
+    Y: 37.7480
+    altitude: 2700.0
+    coordinates: DEG
+    data_source_id: 0
+  - net: IV
+    sta: EPLC
+    X: 14.9876
+    Y: 37.7367
+    altitude: 2400.0
+    coordinates: DEG
+    data_source_id: 0
+  - net: IV
+    sta: EPDN
+    X: 15.0120
+    Y: 37.7726
+    altitude: 2010.0
+    coordinates: DEG
+    data_source_id: 0

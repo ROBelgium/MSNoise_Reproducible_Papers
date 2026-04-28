@@ -64,3 +64,35 @@ papers:
   msnoise_version_min: 2.0.0
   levels_available: []
   data_source: fdsn://http://ws.resif.fr
+- id: 2019_DePlaen_Etna
+  title: Temporal Changes of Seismic Velocity Caused by Volcanic Activity at Mt. Etna
+    Revealed by the Autocorrelation of Ambient Seismic Noise
+  authors:
+  - De Plaen, R.S.M.
+  - Cannata, A.
+  - Cannavo', F.
+  - Caudron, C.
+  - Lecocq, T.
+  - Francis, O.
+  year: 2019
+  doi: 10.3389/feart.2018.00251
+  journal: Frontiers in Earth Science
+  journal_abbrev: ''
+  volume: 6
+  pages: '251'
+  network: ''
+  region: ''
+  period:
+  - '2013-04-01'
+  - '2014-10-31'
+  components:
+  - EE
+  - NN
+  - ZZ
+  cc_types:
+  - PCC
+  n_filters: 1
+  short_description: ''
+  msnoise_version_min: 2.0.0
+  levels_available: []
+  data_source: ''
