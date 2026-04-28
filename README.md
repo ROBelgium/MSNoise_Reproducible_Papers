@@ -41,6 +41,23 @@ msnoise run preprocess
 
 ## Contributing
 
-To add a paper, open a PR with a new folder under `papers/` containing at minimum
-`project.yaml`, `citation.bib`, and `README.md`.
-The CI will check that the folder is registered in `registry.yaml` and that all required files are present.
+To add a paper, open a PR with a new folder under `papers/` following this checklist:
+
+**Required files** (CI will reject the PR if any are missing):
+
+| File | Content |
+|------|---------|
+| `project.yaml` | Full MSNoise config, importable via `msnoise db init --from-yaml` |
+| `citation.bib` | BibTeX entry |
+| `README.md` | Paper summary, network/period notes, known caveats |
+| `meta.yaml` | Display fields — copy from an existing paper and edit |
+
+**Before opening the PR**, run both scripts locally to regenerate the auto-derived files and verify everything looks correct:
+
+```bash
+python scripts/update_registry.py   # regenerates registry.yaml from all papers/*/meta.yaml + citation.bib + project.yaml
+python scripts/update_readme.py     # regenerates the papers table in this README
+```
+
+Commit the updated `registry.yaml` and `README.md` as part of the PR.
+The CI will re-run both scripts and fail if the committed files are out of sync.
