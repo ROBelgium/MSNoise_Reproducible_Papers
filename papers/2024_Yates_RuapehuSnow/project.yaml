@@ -1,0 +1,105 @@
+msnoise_project_version: 1
+# Yates et al. (2024) - J. Geophys. Res. Solid Earth, 129, e2024JB029568
+# doi:10.1029/2024JB029568
+# "Seasonal Snow Cycles and Their Possible Influence on Seismic Velocity
+#  Changes and Eruptive Activity at Ruapehu Volcano, New Zealand"
+# Network: NZ (GeoNet) — 9 stations (7 short-period + 2 broadband)
+# Stations (elevation):
+#   DRZ (2692 m), TRVZ (2062 m), FWVZ (2043 m), WNVZ (1566 m),
+#   OTVZ (1506 m), NGZ (1452 m), TUVZ (1446 m), WPVZ (1244 m), MTVZ (840 m)
+# Period: 2005-01-01 – 2009-01-01
+# Approach: SC only (EN, EZ, NZ) — AC excluded (1-bit whitening incompatible)
+# Pipeline: preprocess → cc → filter → stack + refstack → wavelet → wavelet_dtt → wavelet_dtt_dvv
+
+global_1:
+  startdate: "2005-01-01"
+  enddate: "2009-01-01"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  # §2.2: "bandpass filter between 0.01 and 10 Hz to avoid aliasing"
+  # "downsampled to 25 Hz"
+  cc_sampling_rate: 25.0
+  resampling_method: Decimate
+  preprocess_highpass: 0.01
+  preprocess_lowpass: 10.0
+  preprocess_components: "E,N,Z"
+  # §2.2: "no instrument response correction is applied" (single-station)
+  remove_response: "N"
+
+data_sources:
+  - uri: "fdsn://https://service.geonet.org.nz"
+    network: "NZ"
+    channels: "HH?,EH?"
+
+stations:
+  # 2 broadband (HH?): FWVZ, WPVZ
+  # 7 short-period (EH?): DRZ, TRVZ, WNVZ, NGZ, OTVZ, TUVZ, MTVZ
+  station_endpoint: "https://service.geonet.org.nz/fdsnws/station/1/query?network=NZ&station=DRZ,TRVZ,FWVZ,WNVZ,OTVZ,NGZ,TUVZ,WPVZ,MTVZ&level=station"
+
+cc_1:
+  after: preprocess_1
+  # §2.2: "30-min windows"
+  maxlag: 150.0
+  corr_duration: 1800.0
+  overlap: 0.0
+  winsorizing: 3.0                  # §2.2: "clipped at three times the RMS"
+  # §2.2: "spectrally whitened between 0.1 and 8.0 Hz"
+  # whitening="C": applied only for cross-components (SC), not AC
+  whitening: "C"
+  components_to_compute: ""
+  components_to_compute_single_station: "EN,EZ,NZ"
+  keep_days: "Y"
+
+filter_1:
+  after: cc_1
+  # Full whitening/wavelet band 0.1–8.0 Hz
+  freqmin: 0.1
+  freqmax: 8.0
+  CC: "N"
+  SC: "Y"
+  AC: "N"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  mov_stack: "(('10D','1D'))"       # §2.2: "10-day cross-correlation functions"
+
+refstack_1:
+  after: filter_1
+  # §2.2: "reference stack of all available cross-correlation functions"
+  ref_begin: "2005-01-01"
+  ref_end: "2009-01-01"
+  stack_method: linear
+
+wavelet_1:
+  after: [stack_1, refstack_1]
+  # §2.4: Morlet wavelet, 0.1–8.0 Hz
+  wavelet_type: "('Morlet',6.)"
+  wct_freqmin: 0.1
+  wct_freqmax: 8.0
+  wct_ns: 5                         # §2.4: Gaussian smoothing, 5-scale boxcar
+  wct_nt: 1                         # temporal smoothing (std≈1.5 s in paper)
+  wct_vpo: 12
+  wct_nptsfreq: 100
+  wct_norm: True
+  wct_compute_dtt: True
+
+wavelet_dtt_1:
+  after: wavelet_1
+  # §2.4: coda start=5 s, dynamic end = 20 cycles/freq (max 120 s)
+  wct_freqmin: 0.1
+  wct_freqmax: 8.0
+  wct_minlag: 5.0                   # §2.4: "minimum lag time for the coda as 5 s"
+  wct_lag: "dynamic"                # §2.4: "20 cycles at a given frequency"
+  wct_codacycles: 20
+  wct_width: 115.0                  # fallback max: 120 s - 5 s start (used when dynamic exceeds this)
+  wct_sides: "both"
+  wct_mincoh: 0.7                   # §2.4: "wavelet coherence less than 0.7 → weight = 0"
+  wct_maxdt: 0.3                    # §2.4: "maximum delay time measurement of 0.3 s"
+  wct_min_nonzero: 0.25             # §2.4: "at least 25% of measurements with non-zero weight"
+
+wavelet_dtt_dvv_1:
+  after: wavelet_dtt_1

@@ -214,3 +214,40 @@ papers:
   data_open: true
   uses_msnoise: true
   data_source: fdsn://http://ws.resif.fr
+- id: 2024_Yates_RuapehuSnow
+  title: Seasonal Snow Cycles and Their Possible Influence on Seismic Velocity Changes
+    and Eruptive Activity at Ruapehu Volcano, New Zealand
+  authors:
+  - Yates, A.S.
+  - Caudron, C.
+  - Mordret, A.
+  - Lesage, P.
+  - Pinel, V.
+  - Lecocq, T.
+  - Miller, C.A.
+  - Lamb, O.D.
+  - Fournier, N.
+  year: 2024
+  doi: 10.1029/2024JB029568
+  journal: 'Journal of Geophysical Research: Solid Earth'
+  journal_abbrev: JGR Solid Earth
+  volume: 129
+  pages: e2024JB029568
+  network: NZ
+  region: Mt. Ruapehu, New Zealand
+  period:
+  - '2005-01-01'
+  - '2009-01-01'
+  components:
+  - EN
+  - EZ
+  - NZ
+  cc_types: []
+  n_filters: 1
+  short_description: SC + cross-wavelet transform; seasonal snow influence on dv/v
+    and spring eruption timing
+  msnoise_version_min: 2.0.0
+  levels_available: []
+  data_open: true
+  uses_msnoise: true
+  data_source: fdsn://https://service.geonet.org.nz
