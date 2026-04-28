@@ -1,0 +1,220 @@
+msnoise_project_version: 1
+# De Plaen et al. (2016) - Geophys. Res. Lett. doi:10.1002/2016GL070078
+# "Single station monitoring of volcanoes using seismic ambient noise"
+# Piton de la Fournaise, Reunion Island — 2014 eruption (21 June)
+# Network: PF (OVPF/IPGP), stations CSS, FJS, FOR — broadband 3-component
+# Period:  2014-01-01 – 2014-07-31
+# Approach: SC (single-station cross-component) + AC (autocorrelation)
+#            tested in 4 frequency bands → 4 filter/stack/mwcs lineages
+
+global_1:
+  startdate: "2014-01-01"
+  enddate: "2014-07-31"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  # Paper: "bandpass pre-filtered between 0.01 and 8.0 Hz and resampled to 20 Hz"
+  cc_sampling_rate: 20.0
+  resampling_method: Decimate
+  preprocess_highpass: 0.01
+  preprocess_lowpass: 8.0
+  preprocess_components: "E,N,Z"    # all 3 components needed for SC + AC
+  remove_response: "N"
+
+cc_1:
+  after: preprocess_1
+  cc_sampling_rate: 20.0
+  maxlag: 120.0
+  corr_duration: 1800.0             # 30-minute slices (same as Lecocq 2014)
+  overlap: 0.0
+  # Paper: "Clipping eventually provided the most stable results"
+  # "clipping at 3 times the RMS of each time window"
+  winsorizing: 3.0
+  # Paper: "spectral whitening ... was not applied for AC since only the phase
+  #         of the signal would remain and the auto-correlation of such a signal
+  #         does not contain information on the medium anymore"
+  # whitening=C → only applied when components are different (SC), not same (AC)
+  whitening: "C"
+  whitening_type: B
+  clip_after_whiten: "N"
+  stack_method: linear
+  # No inter-station CC in this study
+  components_to_compute: ""
+  cc_type: CC                       # classical CC (PCC noted as future work)
+  cc_type_single_station_AC: CC     # AC with CC (PCC left to "a future study")
+  cc_type_single_station_SC: CC
+  # SC: EZ, NZ, EN (3 cross-component pairs per station)
+  # AC: ZZ, EE, NN (3 autocorrelation pairs per station)
+  components_to_compute_single_station: "ZZ,EE,NN,EZ,NZ,EN"
+  keep_all: "Y"
+  keep_days: "Y"
+
+# ── 4 frequency bands (Fig. 3: 0.1-1.0, 0.5-1.0, 1.0-2.0, 2.0-4.0 Hz) ──
+
+filter_1:
+  after: cc_1
+  freqmin: 0.1
+  freqmax: 1.0
+  CC: "N"
+  SC: "Y"
+  AC: "Y"
+  used: "Y"
+
+filter_2:
+  after: cc_1
+  freqmin: 0.5
+  freqmax: 1.0
+  CC: "N"
+  SC: "Y"
+  AC: "Y"
+  used: "Y"
+
+filter_3:
+  after: cc_1
+  # Paper: best SC results; Fig. 4A reports SC at 1.0-2.0 Hz
+  freqmin: 1.0
+  freqmax: 2.0
+  CC: "N"
+  SC: "Y"
+  AC: "Y"
+  used: "Y"
+
+filter_4:
+  after: cc_1
+  freqmin: 2.0
+  freqmax: 4.0
+  CC: "N"
+  SC: "Y"
+  AC: "Y"
+  used: "Y"
+
+# ── Stacks: one per filter, 5-day linear ──
+# Paper: "averaged with a 5-days linear stacking to maximise the signal-to-noise ratio"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  mov_stack: "(('5D','1D'))"
+  wienerfilt: "N"
+
+stack_2:
+  after: filter_2
+  stack_method: linear
+  mov_stack: "(('5D','1D'))"
+  wienerfilt: "N"
+
+stack_3:
+  after: filter_3
+  stack_method: linear
+  mov_stack: "(('5D','1D'))"
+  wienerfilt: "N"
+
+stack_4:
+  after: filter_4
+  stack_method: linear
+  mov_stack: "(('5D','1D'))"
+  wienerfilt: "N"
+
+# ── Refstacks: full-period reference ──
+# Paper: "reference CCF that averages the results for the whole period of study"
+
+refstack_1:
+  after: filter_1
+  ref_begin: "2014-01-01"
+  ref_end: "2014-07-31"
+  stack_method: linear
+  wienerfilt: "N"
+
+refstack_2:
+  after: filter_2
+  ref_begin: "2014-01-01"
+  ref_end: "2014-07-31"
+  stack_method: linear
+  wienerfilt: "N"
+
+refstack_3:
+  after: filter_3
+  ref_begin: "2014-01-01"
+  ref_end: "2014-07-31"
+  stack_method: linear
+  wienerfilt: "N"
+
+refstack_4:
+  after: filter_4
+  ref_begin: "2014-01-01"
+  ref_end: "2014-07-31"
+  stack_method: linear
+  wienerfilt: "N"
+
+# ── MWCS: one per filter, band matched to filter ──
+
+mwcs_1:
+  after: [stack_1, refstack_1]
+  freqmin: 0.1
+  freqmax: 1.0
+  mwcs_wlen: 10.0
+  mwcs_step: 5.0
+
+mwcs_2:
+  after: [stack_2, refstack_2]
+  freqmin: 0.5
+  freqmax: 1.0
+  mwcs_wlen: 10.0
+  mwcs_step: 5.0
+
+mwcs_3:
+  after: [stack_3, refstack_3]
+  freqmin: 1.0
+  freqmax: 2.0
+  mwcs_wlen: 10.0
+  mwcs_step: 5.0
+
+mwcs_4:
+  after: [stack_4, refstack_4]
+  freqmin: 2.0
+  freqmax: 4.0
+  mwcs_wlen: 10.0
+  mwcs_step: 5.0
+
+# ── MWCS DTT: one per mwcs ──
+# Paper: "time lags between 5 and 35 seconds, preventing direct wave contamination"
+# "both negative and positive sides"
+# quality control via coherency and regression error (thresholds not stated →
+# using Lecocq 2014 values: mincoh=0.5, maxerr=0.1)
+
+mwcs_dtt_1:
+  after: [mwcs_1, mwcs_2, mwcs_3, mwcs_4]
+  dtt_minlag: 5.0
+  dtt_width: 30.0
+  dtt_lag: static
+  dtt_sides: both
+  dtt_mincoh: 0.5
+  dtt_maxerr: 0.1
+  dtt_maxdtt: 1.0
+
+# ── DVV: one per mwcs_dtt ──
+# SC and AC are single-station → no clock error → m0 for both
+# dvv_split_pair_type separates SC vs AC in the output
+
+mwcs_dtt_dvv_1:
+  after: mwcs_dtt_1
+  dvv_split_pair_type: "Y"
+  dvv_split_components: "Y"
+  dvv_sc_value: m0
+  dvv_sc_error: em0
+  dvv_ac_value: m0
+  dvv_ac_error: em0
+  dvv_weighted_mean: "Y"
+  dvv_trimmed_mean: "Y"
+  dvv_output_percent: "Y"
+
+data_sources:
+  - name: EPOS-FR
+    uri: "fdsn://http://ws.resif.fr"
+    data_structure: SDS
+    auth_env: MSNOISE
+
+stations:
+  station_endpoint: "http://ws.resif.fr/fdsnws/station/1/query?network=PF&station=CSS,FJS,FOR&level=response&starttime=2014-01-01&endtime=2014-07-31"

@@ -1,0 +1,123 @@
+msnoise_project_version: 1
+# Lecocq, Caudron & Brenguier (2014) - Seismol. Res. Lett. 85(3):715-726
+# "MSNoise, a Python Package for Monitoring Seismic Velocity Changes
+#  Using Ambient Seismic Noise"
+# UnderVolc project — Piton de la Fournaise, La Réunion
+# Network: YA, 21 broadband 3-component stations, 100 Hz
+# Period:  2009-09-01 – 2011-07-01
+
+global_1:
+  startdate: "2009-09-01"
+  enddate: "2011-07-01"
+  output_folder: OUTPUT
+  hpc: "N"
+
+preprocess_1:
+  after: global_1
+  # Paper: "100 Hz waveforms bandpassed between 0.01 and 8.0 Hz,
+  #         then decimated to 20 Hz (factor 5)"
+  cc_sampling_rate: 20.0
+  resampling_method: Decimate
+  preprocess_highpass: 0.01
+  preprocess_lowpass: 8.0
+  preprocess_components: "Z"      # only ZZ computed, Z sufficient
+  remove_response: "N"
+
+cc_1:
+  after: preprocess_1
+  cc_sampling_rate: 20.0
+  maxlag: 120.0
+  # Paper: "30 minute slices"
+  corr_duration: 1800.0
+  overlap: 0.0
+  # Paper: "Windsorizing of three times RMS"
+  winsorizing: 3.0
+  # Paper: "whitening the amplitude of the signal between two configured
+  #         frequencies" — classical CC with spectral whitening
+  whitening: "A"
+  whitening_type: B               # brutal (amplitude→1), original MSNoise method
+  clip_after_whiten: "N"
+  stack_method: linear
+  # Paper: "Only ZZ components have been calculated for different stations
+  #         (no auto correlation)"
+  components_to_compute: "ZZ"
+  components_to_compute_single_station: ""
+  cc_type: CC
+  # Paper: "resulting CCFs were saved to disk, together with the daily stack"
+  keep_all: "Y"
+  keep_days: "Y"
+
+filter_1:
+  after: cc_1
+  # Paper: MWCS frequency band 0.2–0.85 Hz (also the whitening band)
+  freqmin: 0.2
+  freqmax: 0.85
+  CC: "Y"
+  SC: "N"
+  AC: "N"
+  used: "Y"
+
+stack_1:
+  after: filter_1
+  stack_method: linear
+  # Paper: "Stacks have been calculated for 2, 5, 10, and 30 moving-window days"
+  # Fig 8 also shows 1-day stack → all five included
+  mov_stack: "(('1D','1D'),('2D','1D'),('5D','1D'),('10D','1D'),('30D','1D'))"
+  wienerfilt: "N"
+
+refstack_1:
+  after: filter_1
+  # Paper: reference = stack of all available data
+  ref_begin: "2009-09-01"
+  ref_end: "2011-07-01"
+  stack_method: linear
+  wienerfilt: "N"
+
+mwcs_1:
+  after: [stack_1, refstack_1]
+  # Paper: "MWCS frequency band is 0.2–0.85 Hz … 10 second sliding windows
+  #         overlapping by 50%"
+  freqmin: 0.2
+  freqmax: 0.85
+  mwcs_wlen: 10.0
+  mwcs_step: 5.0                  # 50% overlap of 10 s window
+
+mwcs_dtt_1:
+  after: mwcs_1
+  # Paper: "lag times between ±5 and ±50 s … 0.5 minimum coherence,
+  #         0.1 s maximum error, 0.5 s maximum dt"
+  # "both causal and acausal parts are used"
+  dtt_minlag: 5.0
+  dtt_width: 45.0                 # 5 + 45 = 50 s max lag
+  dtt_lag: static
+  dtt_sides: both
+  dtt_mincoh: 0.5
+  dtt_maxerr: 0.1
+  dtt_maxdtt: 0.5
+
+mwcs_dtt_dvv_1:
+  after: mwcs_dtt_1
+  dvv_split_pair_type: "Y"
+  dvv_split_components: "Y"
+  # Paper eq. 10a/10b: both free (m) and forced-zero (m0) slopes computed.
+  # Fig 4: "Forced and not-forced δt/t values are very similar,
+  #          but the error on the latter is an order of magnitude larger"
+  # → use free-intercept slope for CC; m0 available as cross-check
+  dvv_cc_value: m
+  dvv_cc_error: em
+  dvv_weighted_mean: "Y"
+  dvv_trimmed_mean: "Y"
+  dvv_output_percent: "Y"
+
+# ── Data source ────────────────────────────────────────────────────────────
+# EPOS-FR FDSN webservice — YA = UnderVolc temporary network, IPGP/ISTerre
+
+data_sources:
+  - name: EPOS-FR
+    uri: "fdsn://http://ws.resif.fr"
+    data_structure: SDS
+    auth_env: MSNOISE
+
+stations:
+  # Fetches all 21 YA stations with full response (saved to response_path).
+  station_endpoint: "http://ws.resif.fr/fdsnws/station/1/query?network=YA&level=response&starttime=2009-09-01&endtime=2011-07-01"
