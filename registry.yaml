@@ -27,7 +27,7 @@ papers:
   cc_types:
   - CC
   n_filters: 1
-  short_description: Foundation of MSNoise
+  short_description: Foundation of MSNoise, CC-ZZ only
   msnoise_version_min: 2.0.0
   levels_available: []
   data_open: true
