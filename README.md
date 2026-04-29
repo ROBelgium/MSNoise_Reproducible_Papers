@@ -33,7 +33,7 @@ msnoise run preprocess
 <!-- PAPERS_START -->
 | Year | Reference | Network | Approach | Data | MSNoise | E2E ✔ | Project |
 |------|-----------|---------|----------|------|---------|-------|---------|
-| 2014 | [Lecocq et al., *SRL*](https://doi.org/10.1785/0220130073) | YA - Piton de la Fournaise, La Réunion | Foundation of MSNoise, CC-ZZ only | ✅ | ✅ | ❌ | [🔗](papers/2014_Lecocq_MSNoiseUndervolc) |
+| 2014 | [Lecocq et al., *SRL*](https://doi.org/10.1785/0220130073) | YA - Piton de la Fournaise, La Réunion | Foundation of MSNoise, CC-ZZ only | ✅ | ✅ | ✅ | [🔗](papers/2014_Lecocq_MSNoiseUndervolc) |
 | 2016 | [De Plaen et al., *GRL*](https://doi.org/10.1002/2016GL070078) | PF - Piton de la Fournaise, La Réunion | Single-station SC + AC, 4 frequency bands | ✅ | ✅ | ❌ | [🔗](papers/2016_DePlaen_PitonDeLaFournaise) |
 | 2019 | [De Plaen et al., *Front. Earth Sci.*](https://doi.org/10.3389/feart.2018.00251) | IV - Mt. Etna, Sicily, Italy | AC with PCC, velocity changes from volcanic activity | ❌ | ✅ | ❌ | [🔗](papers/2019_DePlaen_Etna) |
 | 2019 | [Yates et al., *GRL*](https://doi.org/10.1029/2018GL080580) | NZ - White Island (Whakaari), New Zealand | Single-station SC + AC, 2 frequency bands, volcanic/coseismic/seasonal separation | ✅ | ✅ | ❌ | [🔗](papers/2019_Yates_WhiteIsland) |

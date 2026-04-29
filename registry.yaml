@@ -33,7 +33,7 @@ papers:
   - dvv
   data_open: true
   uses_msnoise: true
-  validated: false
+  validated: true
   data_source: fdsn://http://ws.resif.fr
 - id: 2016_DePlaen_PitonDeLaFournaise
   title: Single-station monitoring of volcanoes using seismic ambient noise
