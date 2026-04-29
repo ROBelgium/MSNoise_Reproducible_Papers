@@ -21,9 +21,16 @@ if not yamls:
     print("No project*.yaml files found.")
     sys.exit(1)
 
-failures = []
+SEP = "─" * 60
+
+failures  = []
+all_warns = []   # (yaml_path, [warning lines])
+
 for yaml_path in yamls:
-    print(f"\n── {yaml_path} ──")
+    print(f"\n{SEP}")
+    print(f"  {yaml_path}")
+    print(SEP)
+
     with tempfile.TemporaryDirectory() as tmpdir:
         result = subprocess.run(
             ["msnoise", "db", "init", "--tech", "1",
@@ -33,18 +40,50 @@ for yaml_path in yamls:
             text=True,
             input="3\n",
         )
-        print(result.stdout)
-        if result.returncode != 0:
-            print(result.stderr)
-            failures.append(str(yaml_path))
-            print(f"FAIL: {yaml_path}")
-        else:
-            print(f"OK:   {yaml_path}")
+
+    # stdout — strip blank lines for compactness
+    for line in result.stdout.splitlines():
+        if line.strip():
+            print(f"  {line}")
+
+    # stderr — split into warnings and real errors
+    warns = [l for l in result.stderr.splitlines() if "WARNING" in l]
+    errors = [l for l in result.stderr.splitlines() if l.strip() and "WARNING" not in l]
+
+    if warns:
+        print(f"\n  ⚠  {len(warns)} warning(s):")
+        for w in warns:
+            # strip the "WARNING:msnoise.core.config:" prefix for readability
+            msg = w.split("WARNING")[-1].lstrip(":msnoise.core.config").lstrip(":")
+            print(f"     {msg.strip()}")
+        all_warns.append((str(yaml_path), warns))
+
+    if result.returncode != 0:
+        print(f"\n  ✖  FAILED")
+        if errors:
+            # print last 5 lines of traceback — enough to diagnose
+            for line in errors[-5:]:
+                print(f"     {line}")
+        failures.append(str(yaml_path))
+    else:
+        print(f"\n  ✔  OK")
+
+# ── Summary ──────────────────────────────────────────────────────────────────
+print(f"\n{'═' * 60}")
+print(f"  Results: {len(yamls)} file(s) tested")
+
+if all_warns:
+    print(f"\n  Warnings ({sum(len(w) for _, w in all_warns)} total):")
+    for path, warns in all_warns:
+        print(f"    {path}: {len(warns)} warning(s)")
+        for w in warns:
+            msg = w.split("WARNING")[-1].lstrip(":msnoise.core.config").lstrip(":")
+            print(f"      · {msg.strip()}")
 
 if failures:
-    print(f"\n{len(failures)} failure(s):")
+    print(f"\n  Failures ({len(failures)}):")
     for f in failures:
-        print(f"  {f}")
+        print(f"    ✖  {f}")
     sys.exit(1)
 else:
-    print(f"\nAll {len(yamls)} project file(s) passed.")
+    print(f"\n  All passed ✔")
