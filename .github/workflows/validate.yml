@@ -93,3 +93,27 @@ jobs:
             echo "Run: python scripts/update_readme.py"
             exit 1
           )
+
+      - name: Install dependencies for project schema validation
+        run: pip install jsonschema pyyaml "jsonschema[format]" "git+https://github.com/ROBelgium/MSNoise.git@master#egg=msnoise"
+
+      - name: Generate and validate project.yaml files against schema
+        run: |
+          python scripts/generate_project_schema.py
+          python - <<'EOF2'
+          import yaml, jsonschema, pathlib, sys
+          def load(p): return yaml.safe_load(pathlib.Path(p).read_text(encoding="utf-8"))
+          schema = load("_schema/project.schema.yaml")
+          schema.pop("$schema", None)
+          schema.pop("unevaluatedProperties", None)
+          ok = True
+          for f in sorted(pathlib.Path("papers").rglob("project*.yaml")):
+              data = load(f)
+              try:
+                  jsonschema.validate(data, schema)
+                  print(f"  OK  {f}")
+              except jsonschema.ValidationError as e:
+                  print(f"  FAIL {f}: {list(e.path)} — {e.message[:120]}")
+                  ok = False
+          sys.exit(0 if ok else 1)
+          EOF2
