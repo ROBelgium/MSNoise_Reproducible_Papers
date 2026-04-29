@@ -9,6 +9,7 @@ import pathlib
 import subprocess
 import sys
 import tempfile
+import threading
 
 root = pathlib.Path(__file__).parent.parent
 
@@ -23,45 +24,57 @@ if not yamls:
 
 SEP = "─" * 60
 
+
+def stream(pipe, prefix, store):
+    """Read lines from pipe, print immediately, and accumulate in store."""
+    for raw in pipe:
+        line = raw.rstrip()
+        print(f"{prefix}{line}", flush=True)
+        store.append(line)
+
+
 failures  = []
-all_warns = []   # (yaml_path, [warning lines])
+all_warns = []
 
 for yaml_path in yamls:
     print(f"\n{SEP}")
     print(f"  {yaml_path}")
-    print(SEP)
+    print(SEP, flush=True)
+
+    stdout_lines = []
+    stderr_lines = []
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        result = subprocess.run(
+        proc = subprocess.Popen(
             ["msnoise", "db", "init", "--tech", "1",
              "--from-yaml", str(yaml_path.resolve())],
             cwd=tmpdir,
-            capture_output=True,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             text=True,
-            input="3\n",
         )
+        proc.stdin.write("n\n")
+        proc.stdin.close()
 
-    # stdout — strip blank lines for compactness
-    for line in result.stdout.splitlines():
-        if line.strip():
-            print(f"  {line}")
+        # stream stdout and stderr concurrently so neither blocks the other
+        t_out = threading.Thread(target=stream, args=(proc.stdout, "  ", stdout_lines))
+        t_err = threading.Thread(target=stream, args=(proc.stderr, "  ", stderr_lines))
+        t_out.start()
+        t_err.start()
+        t_out.join()
+        t_err.join()
+        proc.wait()
 
-    # stderr — split into warnings and real errors
-    warns = [l for l in result.stderr.splitlines() if "WARNING" in l]
-    errors = [l for l in result.stderr.splitlines() if l.strip() and "WARNING" not in l]
+    warns  = [l for l in stderr_lines if "WARNING" in l]
+    errors = [l for l in stderr_lines if l.strip() and "WARNING" not in l]
 
     if warns:
-        print(f"\n  ⚠  {len(warns)} warning(s):")
-        for w in warns:
-            # strip the "WARNING:msnoise.core.config:" prefix for readability
-            msg = w.split("WARNING")[-1].lstrip(":msnoise.core.config").lstrip(":")
-            print(f"     {msg.strip()}")
         all_warns.append((str(yaml_path), warns))
 
-    if result.returncode != 0:
+    if proc.returncode != 0:
         print(f"\n  ✖  FAILED")
         if errors:
-            # print last 5 lines of traceback — enough to diagnose
             for line in errors[-5:]:
                 print(f"     {line}")
         failures.append(str(yaml_path))
