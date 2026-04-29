@@ -31,7 +31,7 @@ for yaml_path in yamls:
             cwd=tmpdir,
             capture_output=True,
             text=True,
-            input="n\n",
+            input="3\n",
         )
         print(result.stdout)
         if result.returncode != 0:
