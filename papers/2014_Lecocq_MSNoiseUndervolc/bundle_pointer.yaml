@@ -4,7 +4,7 @@ levels:
   stack:
     description: "Stacked CCFs for all movstacks"
     url: "ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2014_Lecocq_MSNoiseUndervolc/level_stack.tar.zst"
-    sha256: "de8ebde8e892b34d2717fc37cf3ed97ac9b0d59409392b49527f94d653b992d8"
+    sha256: "d084daf3e6bd5d456b5f702d76b93045cbd48f2bf9b45fcca85d5640762a5423"
     size_gb: 7.8
   dvv:
     description: "Final dv/v MWCS for all movstacks"
