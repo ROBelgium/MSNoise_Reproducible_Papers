@@ -79,8 +79,8 @@ wavelet_1:
   after: [stack_1, refstack_1]
   # §2.4: Morlet wavelet, 0.1–8.0 Hz
   wavelet_type: "('Morlet',6.)"
-  wct_dtt_freqmin: 0.1
-  wct_dtt_freqmax: 8.0
+  wct_freqmin: 0.1
+  wct_freqmax: 8.0
   wct_ns: 5                         # §2.4: Gaussian smoothing, 5-scale boxcar
   wct_nt: 1                         # temporal smoothing (std≈1.5 s in paper)
   wct_vpo: 12
