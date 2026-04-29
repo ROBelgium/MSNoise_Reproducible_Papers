@@ -30,6 +30,7 @@ papers:
   short_description: Foundation of MSNoise, CC-ZZ only
   msnoise_version_min: 2.0.0
   levels_available:
+  - stack
   - dvv
   data_open: true
   uses_msnoise: true

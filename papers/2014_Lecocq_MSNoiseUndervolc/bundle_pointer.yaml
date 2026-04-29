@@ -1,6 +1,11 @@
 msnoise_version_min: "2.0.1"
 created_at: "2026-04-30"
 levels:
+  stack:
+    description: "Stacked CCFs for all movstacks"
+    url: "ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2014_Lecocq_MSNoiseUndervolc/level_stack.tar.zst"
+    sha256: "de8ebde8e892b34d2717fc37cf3ed97ac9b0d59409392b49527f94d653b992d8"
+    size_gb: 7.8
   dvv:
     description: "Final dv/v MWCS for all movstacks"
     url: "ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2014_Lecocq_MSNoiseUndervolc/level_dvv.tar.zst"
