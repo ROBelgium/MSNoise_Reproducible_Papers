@@ -54,7 +54,7 @@ for yaml_path in yamls:
             stderr=subprocess.PIPE,
             text=True,
         )
-        proc.stdin.write("n\n")
+        proc.stdin.write("3\n")
         proc.stdin.close()
 
         # stream stdout and stderr concurrently so neither blocks the other
