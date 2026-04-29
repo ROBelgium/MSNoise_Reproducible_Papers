@@ -11,7 +11,7 @@ global_1:
   startdate: "2014-01-01"
   enddate: "2014-07-31"
   output_folder: OUTPUT
-  hpc: "N"
+  hpc: "Y"
 
 preprocess_1:
   after: global_1
