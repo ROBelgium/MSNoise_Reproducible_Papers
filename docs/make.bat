@@ -4,8 +4,9 @@ pushd %~dp0
 
 REM Command file for Sphinx documentation
 REM Usage:
-REM   make.bat html     -- full build
-REM   make.bat clean    -- remove _build\ and auto_papers\
+REM   make.bat html       -- static build, notebooks as source (no execution)
+REM   make.bat html-exec  -- full build with notebook execution (needs project_bundle/)
+REM   make.bat clean      -- remove _build\ and auto_papers\
 
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
@@ -32,6 +33,13 @@ if "%1" == "clean" (
 	rmdir /s /q %BUILDDIR% 2>NUL
 	rmdir /s /q auto_papers 2>NUL
 	echo.Removed %BUILDDIR%\ and auto_papers\
+	goto end
+)
+
+if "%1" == "html-exec" (
+	set MRP_EXECUTE_NOTEBOOKS=always
+	%SPHINXBUILD% -b html %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %O%
+	echo.Build finished with execution: %BUILDDIR%\html\index.html
 	goto end
 )
 

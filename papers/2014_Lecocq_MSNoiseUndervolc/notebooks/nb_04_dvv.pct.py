@@ -1,7 +1,6 @@
 # %% [markdown]
 """
-Figures 7 & 8 — dv/v Timeseries
-=================================
+# Figures 7 & 8 — dv/v Timeseries
 
 Reproduces Figures 7 and 8 of Lecocq, Caudron & Brenguier (2014), SRL 85(3).
 
@@ -12,10 +11,8 @@ MSNoise vs D. Clarke's FORTRAN — only MSNoise shown here).
 30 days).  Red = ``ALL`` network mean; green = weighted mean of pairs.
 Red vertical bands = eruptions of Piton de la Fournaise.
 
-**Bundle level required:** ``dvv``
+**Bundle level required:** `dvv`
 """
-
-# sphinx_gallery_thumbnail_number = 2
 
 # %%
 # ------------------------------------------------------------

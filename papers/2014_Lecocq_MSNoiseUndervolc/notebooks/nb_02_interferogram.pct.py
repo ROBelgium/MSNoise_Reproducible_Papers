@@ -1,7 +1,6 @@
 # %% [markdown]
 """
-Figure 3 — Interferogram and Correlation Coefficients
-======================================================
+# Figure 3 — Interferogram and Correlation Coefficients
 
 Reproduces Figure 3 of Lecocq, Caudron & Brenguier (2014), SRL 85(3).
 
@@ -12,10 +11,8 @@ as a time–lag image.
 moving-window stacks against the reference stack, for negative and
 positive lag windows independently.
 
-**Bundle level required:** ``stack``
+**Bundle level required:** `stack`
 """
-
-# sphinx_gallery_thumbnail_number = 1
 
 # %%
 # ------------------------------------------------------------

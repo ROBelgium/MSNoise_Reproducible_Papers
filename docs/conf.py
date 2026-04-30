@@ -48,7 +48,8 @@ intersphinx_mapping = {
 nbsphinx_custom_formats = {
     ".pct.py": ["jupytext.reads", {"fmt": "py:percent"}],
 }
-nbsphinx_execute      = "never"
+import os
+nbsphinx_execute      = os.environ.get("MRP_EXECUTE_NOTEBOOKS", "never")
 nbsphinx_allow_errors = True
 
 # -- autodoc ------------------------------------------------------------------
