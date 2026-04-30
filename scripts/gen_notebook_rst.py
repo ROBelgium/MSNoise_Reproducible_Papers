@@ -162,7 +162,7 @@ def generate_paper(paper_dir: pathlib.Path) -> bool:
     intro = _build_intro(paper_dir, bib, meta)
 
     index_rst = f"""{intro}
-.. toctree::
+.. nbgallery::
    :maxdepth: 1
    :caption: Notebooks
 
