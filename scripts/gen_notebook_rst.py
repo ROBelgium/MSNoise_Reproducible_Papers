@@ -69,9 +69,19 @@ def _author_list(authors: list) -> str:
     return ", ".join(authors[:-1]) + f", & {authors[-1]}"
 
 
+def _short_title(bib: dict) -> str:
+    """Sortable short title: '2014 — Lecocq et al.'"""
+    authors = bib["authors"]
+    year    = bib["year"]
+    last    = authors[0].split(",")[0].strip() if authors else "Unknown"
+    suffix  = " et al." if len(authors) > 1 else ""
+    return f"{year} \u2014 {last}{suffix}"
+
+
 def _build_intro(paper_dir: pathlib.Path, bib: dict, meta: dict) -> str:
     """Build an RST intro block from bib + meta data."""
-    title      = bib["title"] or paper_dir.name
+    title = _short_title(bib)
+    full_title  = bib["title"] or paper_dir.name
     authors    = _author_list(bib["authors"])
     year       = bib["year"]
     journal    = meta.get("journal_abbrev") or bib["journal"]
