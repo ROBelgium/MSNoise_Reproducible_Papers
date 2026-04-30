@@ -14,7 +14,7 @@ Create ``papers/<YYYY_FirstAuthor_ShortTitle>/`` containing::
     project.yaml        ← MSNoise 2.x config (required)
     citation.bib        ← BibTeX entry (required)
     meta.yaml           ← editorial fields (required)
-    README.md           ← paper summary & processing notes (required)
+    README.md           ← optional — shown on GitHub, not used by the docs build
     bundle_pointer.yaml ← data bundle URLs (optional, add when bundles exist)
     notebooks/          ← analysis notebooks (optional)
         nb_01_dvv.py
@@ -91,20 +91,14 @@ Every ``data_sources`` entry must include a ``name`` field that is not
 Omitting ``name`` causes a ``KeyError`` during ``db init``.
 
 
-``README.md``
--------------
+``README.md`` (optional)
+------------------------
 
-This file is the canonical human-readable description of the paper.
-It is converted automatically to RST at docs build time and becomes
-the header of the paper's notebook gallery section.
-
-Suggested sections:
-
-- Paper reference (authors, title, journal, DOI, year)
-- Network and period
-- Key processing choices (frequency bands, correlation type, dv/v method)
-- Data access (FDSN service, open/restricted, embargo notes)
-- Known issues or deviations from the published processing
+A free-form Markdown file for human readers browsing the repository on
+GitHub.  It is **not** required and is **not** used by the documentation
+build.  The docs intro page is generated automatically from
+``citation.bib`` and ``meta.yaml``, so all structured information should
+live there.
 
 
 Adding notebooks
@@ -141,7 +135,7 @@ Updating the registry
 After creating the paper folder, regenerate the two auto-derived files
 and commit them::
 
-    python scripts/gen_notebook_rst.py    # writes papers/*/notebooks/README.rst
+    python scripts/gen_notebook_rst.py    # copies notebooks into docs/auto_papers/
     python scripts/gen_papers_index.py    # writes docs/papers_index.rst
     python scripts/update_registry.py     # writes registry.yaml
     python scripts/update_readme.py       # updates root README.md papers table
