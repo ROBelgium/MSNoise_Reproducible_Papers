@@ -6,3 +6,5 @@ docs/auto_papers/
 docs/papers_index.rst
 papers/*/notebooks/README.rst
 docs/_notebook_galleries.rst
+
+docs/_papers_toctree.rst

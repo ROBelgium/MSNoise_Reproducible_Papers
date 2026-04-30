@@ -1,16 +1,11 @@
-"""Generate docs/auto_papers/<paper>/index.rst and copy notebooks there.
+"""Generate docs/auto_papers/<paper>/index.rst for every paper.
 
-Builds the intro block from meta.yaml + citation.bib — no README.md or
-external binary (pandoc/m2r2) required.
+Builds each paper's page from meta.yaml + citation.bib.
+Papers with notebooks also get their .pct.py files copied into the docs
+tree so nbsphinx can render them.
 
-For each paper that has a notebooks/ directory containing nb_*.pct.py files:
-
-1. Reads meta.yaml and citation.bib for structured metadata.
-2. Copies nb_*.pct.py to docs/auto_papers/<paper>/ (nbsphinx source tree).
-3. Writes docs/auto_papers/<paper>/index.rst with an inline intro and
-   a toctree of the copied notebooks.
-
-All generated files are gitignored (docs/auto_papers/ is in .gitignore).
+Writes docs/_papers_toctree.rst — a labeled toctree (gitignored) that gives
+sidebar entries short sortable titles while the page H1 keeps the full title.
 
 Called automatically by docs/conf.py setup() before every Sphinx build,
 and manually via ``python scripts/gen_notebook_rst.py``.
@@ -29,19 +24,20 @@ OUT    = ROOT / "docs" / "auto_papers"
 
 
 # ---------------------------------------------------------------------------
-# Metadata helpers
+# Metadata helpers (shared with gen_papers_index.py)
 # ---------------------------------------------------------------------------
 
 def _parse_bib(bib_path: pathlib.Path) -> dict:
     bib = bibtexparser.loads(bib_path.read_text(encoding="utf-8"))
     e   = bib.entries[0]
-    authors_raw = [a.strip() for a in e.get("author", "").split(" and ")]
-    authors = [_abbreviate(a) for a in authors_raw if a]
+    raw = [a.strip() for a in e.get("author", "").split(" and ")]
     return {
         "title":   re.sub(r"[{}]", "", e.get("title", "")),
-        "authors": authors,
+        "authors": [_abbreviate(a) for a in raw if a],
         "year":    e.get("year", ""),
         "journal": re.sub(r"[{}]", "", e.get("journal", "")),
+        "volume":  e.get("volume", ""),
+        "pages":   e.get("pages", "").replace("--", "\u2013"),
         "doi":     e.get("doi", ""),
     }
 
@@ -59,32 +55,22 @@ def _abbreviate(author: str) -> str:
     return f"{last.strip()}, {initials}"
 
 
-def _author_list(authors: list) -> str:
-    if not authors:
-        return ""
-    if len(authors) == 1:
-        return authors[0]
-    if len(authors) == 2:
-        return f"{authors[0]} & {authors[1]}"
-    return ", ".join(authors[:-1]) + f", & {authors[-1]}"
-
-
 def _short_title(bib: dict) -> str:
-    """Sortable short title: '2014 — Lecocq et al.'"""
+    """Sortable short title for sidebar: '2014 \u2014 Lecocq et al.'"""
     authors = bib["authors"]
-    year    = bib["year"]
     last    = authors[0].split(",")[0].strip() if authors else "Unknown"
     suffix  = " et al." if len(authors) > 1 else ""
-    return f"{year} \u2014 {last}{suffix}"
+    return f"{bib['year']} \u2014 {last}{suffix}"
 
 
 def _build_intro(paper_dir: pathlib.Path, bib: dict, meta: dict) -> str:
-    """Build an RST intro block from bib + meta data."""
-    short_title = _short_title(bib)
-    title  = bib["title"] or paper_dir.name
-    authors    = _author_list(bib["authors"])
+    """RST intro block: full title as H1, citation, short desc, metadata table."""
+    full_title = bib["title"] or paper_dir.name
+    authors    = ", ".join(bib["authors"])
     year       = bib["year"]
     journal    = meta.get("journal_abbrev") or bib["journal"]
+    volume     = bib.get("volume", "")
+    pages      = bib.get("pages", "")
     doi        = bib["doi"]
     short_desc = meta.get("short_description", "")
     network    = meta.get("network", "")
@@ -93,13 +79,20 @@ def _build_intro(paper_dir: pathlib.Path, bib: dict, meta: dict) -> str:
     validated  = "yes" if meta.get("validated") else "no"
     data_open  = "yes" if meta.get("data_open")  else "no"
 
-    doi_line = f"`DOI:{doi} <https://doi.org/{doi}>`_" if doi else ""
+    # Tectonophysics-style citation
+    vol_pages = ""
+    if volume:
+        vol_pages += f", {volume}"
+    if pages:
+        vol_pages += f", {pages}"
+    doi_link = f"`https://doi.org/{doi} <https://doi.org/{doi}>`_" if doi else ""
+    citation = f"*{authors} ({year}). {full_title}. {journal}{vol_pages}.* {doi_link}"
 
     lines = [
-        title,
-        "=" * len(title),
+        full_title,
+        "=" * len(full_title),
         "",
-        f"*{authors} ({year}). {journal}.* {doi_line}",
+        citation,
         "",
     ]
     if short_desc:
@@ -130,19 +123,11 @@ def _build_intro(paper_dir: pathlib.Path, bib: dict, meta: dict) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Per-paper generation
+# Per-paper page generation
 # ---------------------------------------------------------------------------
 
-def generate_paper(paper_dir: pathlib.Path) -> bool:
-    """Process one paper. Returns True if notebooks were found and copied."""
-    nb_src = paper_dir / "notebooks"
-    if not nb_src.is_dir():
-        return False
-
-    notebooks = sorted(nb_src.glob("nb_*.pct.py"))
-    if not notebooks:
-        return False
-
+def generate_paper(paper_dir: pathlib.Path):
+    """Generate a docs page for one paper. Returns (True, short_title) or False."""
     bib_path  = paper_dir / "citation.bib"
     meta_path = paper_dir / "meta.yaml"
 
@@ -156,30 +141,62 @@ def generate_paper(paper_dir: pathlib.Path) -> bool:
     bib  = _parse_bib(bib_path)
     meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) or {}
 
-    # Destination inside docs/
     dest = OUT / paper_dir.name
     dest.mkdir(parents=True, exist_ok=True)
 
-    # Copy notebook files so nbsphinx can find them
+    # Notebooks (optional)
+    nb_src    = paper_dir / "notebooks"
+    notebooks = sorted(nb_src.glob("nb_*.pct.py")) if nb_src.is_dir() else []
     for nb in notebooks:
         shutil.copy2(nb, dest / nb.name)
 
-    # Toctree entries: strip the full .pct.py suffix so Sphinx resolves
-    # the nbsphinx-registered source suffix correctly.
-    nb_stems = [nb.name[: -len(".pct.py")] for nb in notebooks]
-    toctree_entries = "\n".join(f"   {s}" for s in nb_stems)
-
     intro = _build_intro(paper_dir, bib, meta)
 
-    index_rst = f"""{intro}
-.. nbgallery::
-   :maxdepth: 1
-   :caption: Notebooks
+    if notebooks:
+        nb_stems = [nb.name[: -len(".pct.py")] for nb in notebooks]
+        toctree_entries = "\n".join(f"   {s}" for s in nb_stems)
+        nb_section = (
+            "\n.. nbgallery::\n"
+            "   :maxdepth: 1\n"
+            "   :caption: Notebooks\n"
+            "\n"
+            f"{toctree_entries}\n"
+        )
+    else:
+        nb_section = ""
 
-{toctree_entries}
-"""
-    (dest / "index.rst").write_text(index_rst, encoding="utf-8")
+    (dest / "index.rst").write_text(intro + nb_section, encoding="utf-8")
+    if notebooks:
+        return True, _short_title(bib) + " 🐍"
     return True, _short_title(bib)
+
+
+# ---------------------------------------------------------------------------
+# Sidebar toctree
+# ---------------------------------------------------------------------------
+
+def _write_papers_toctree(entries: list):
+    """Write docs/_papers_toctree.rst with explicit labeled entries for all papers.
+
+    Short sortable labels (e.g. '2014 — Lecocq et al.') appear in the sidebar
+    while the page H1 keeps the full paper title.
+    """
+    out = ROOT / "docs" / "_papers_toctree.rst"
+    if not entries:
+        out.write_text("", encoding="utf-8")
+        return
+
+    toc_lines = [
+        ".. toctree::",
+        "   :maxdepth: 1",
+        "   :caption: Papers",
+        "",
+    ]
+    for short, paper_id in sorted(entries):
+        toc_lines.append(f"   {short} <auto_papers/{paper_id}/index>")
+    toc_lines.append("")
+
+    out.write_text("\n".join(toc_lines), encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------
@@ -187,9 +204,9 @@ def generate_paper(paper_dir: pathlib.Path) -> bool:
 # ---------------------------------------------------------------------------
 
 def generate(papers_root: pathlib.Path = PAPERS):
-    written  = []
-    skipped  = []
-    entries  = []   # (short_title, paper_id) for the labeled toctree
+    ok      = []
+    skipped = []
+    entries = []
 
     for paper_dir in sorted(papers_root.iterdir()):
         if not paper_dir.is_dir():
@@ -197,39 +214,16 @@ def generate(papers_root: pathlib.Path = PAPERS):
         result = generate_paper(paper_dir)
         if result:
             _, short = result
-            written.append(paper_dir.name)
+            ok.append(paper_dir.name)
             entries.append((short, paper_dir.name))
         else:
             skipped.append(paper_dir.name)
 
-    _write_galleries_toctree(entries)
+    _write_papers_toctree(entries)
 
-    if written:
-        print(f"Generated notebook docs for: {', '.join(written)}")
+    print(f"Generated paper pages for: {', '.join(ok)}")
     if skipped:
-        print(f"Skipped (no notebooks): {', '.join(skipped)}")
-
-
-def _write_galleries_toctree(entries: list):
-    """Write docs/_notebook_galleries.rst with explicit labeled toctree entries.
-
-    Replaces the :glob: toctree in docs/index.rst so sidebar labels can
-    differ from page H1 titles.
-    """
-    out = ROOT / "docs" / "_notebook_galleries.rst"
-    if not entries:
-        out.write_text("", encoding="utf-8")
-        return
-
-    toc_lines = [".. toctree::",
-                 "   :maxdepth: 1",
-                 "   :caption: Notebook galleries",
-                 ""]
-    for short, paper_id in sorted(entries):   # sorted by short title = by year
-        toc_lines.append(f"   {short} <auto_papers/{paper_id}/index>")
-    toc_lines.append("")
-
-    out.write_text("\n".join(toc_lines), encoding="utf-8")
+        print(f"Skipped (missing bib/meta): {', '.join(skipped)}")
 
 
 if __name__ == "__main__":

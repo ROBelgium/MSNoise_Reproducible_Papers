@@ -133,21 +133,23 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
         "",
         f"The registry currently contains **{len(papers)} paper(s)**.",
         "",
-        "Columns: **Open** = data freely available via FDSN or public archive;",
-        "**Validated** = pipeline run end-to-end by a maintainer;",
-        "**Notebooks** = analysis notebooks available in this registry.",
+        "Columns: **Open** = data freely available via FDSN or public archive: immediately accessible;",
+        "**Valid** = pipeline was validated & ran end-to-end by a maintainer;",
+        "**NB** = analysis notebooks available in this registry.",
         "",
         ".. list-table::",
         "   :header-rows: 1",
-        "   :width: 80%",
+        "   :width: 100%",
+        "   :class: longtable"
+        "",
         "",
         "   * - Title / Authors",
         "     - Network",
         "     - Region",
         "     - Levels available",
         "     - Open",
-        "     - Validated",
-        "     - Notebooks",
+        "     - Valid",
+        "     - NB",
     ]
 
     for p in sorted_papers:
@@ -173,20 +175,26 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
 
         nb_dir  = ROOT / "papers" / pid / "notebooks"
         has_nbs = nb_dir.is_dir() and any(nb_dir.glob("nb_*.pct.py"))
-        nb_flag = "✅" if has_nbs else ""
+        nb_flag = "✅" if has_nbs else "❌"
 
-        # Title cell: gallery link > DOI link > plain text
+        # Citation cell: link title to paper page or DOI
         if has_nbs:
-            title_cell = f":doc:`auto_papers/{pid}/index`"
+            title_link = f":doc:`{title} <auto_papers/{pid}/index>`"
         elif doi:
-            title_cell = f"`{title} <https://doi.org/{doi}>`_"
+            title_link = f"`{title} <https://doi.org/{doi}>`_"
         else:
-            title_cell = title
+            title_link = title
+
+        vol   = bib.get("volume", p.get("volume", "")) if bib else p.get("volume", "")
+        pages = (bib.get("pages", p.get("pages", "")) if bib else p.get("pages", "")).replace("--", "\u2013")
+        vol_pages = (f", {vol}" if vol else "") + (f", {pages}" if pages else "")
+        doi_link  = f"`https://doi.org/{doi} <https://doi.org/{doi}>`_" if doi else ""
+        journal_str = p.get("journal_abbrev", "") or p.get("journal", "")
+        year = bib.get("year", p.get("year", ""))
+        citation = f"{authors} ({year}). {title_link}. *{journal_str}{vol_pages}.* {doi_link}"
 
         lines += [
-            f"   * - | {title_cell}",
-            f"       | *{authors}*",
-            f"       | {journal}",
+            f"   * - {citation}",
             f"     - {network}",
             f"     - {region}",
             f"     - {levels}",
@@ -194,25 +202,6 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
             f"     - {val_flag}",
             f"     - {nb_flag}",
         ]
-
-    # ------------------------------------------------------------------
-    # Full references section
-    # ------------------------------------------------------------------
-    lines += [
-        "",
-        "Full References",
-        "---------------",
-        "",
-    ]
-    for p in sorted_papers:
-        pid = p.get("id", "")
-        bib = bib_data.get(pid)
-        if not bib:
-            continue
-        label    = _ref_label(bib)
-        citation = _format_citation(bib)
-        lines.append(f".. [{label}] {citation}")
-        lines.append("")
 
     out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Written {out_path} ({len(papers)} papers)")

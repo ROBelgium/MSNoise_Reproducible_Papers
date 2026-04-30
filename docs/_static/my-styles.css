@@ -268,3 +268,7 @@ div .third_footer { max-width: 33%; float: left; padding-bottom: 40px; text-alig
 .wy-side-nav-search {
     background-color: #fff ;
 }
+
+.wy-table-responsive table td, .wy-table-responsive table th {
+    white-space: normal;
+}

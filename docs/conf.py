@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT))
 # -- Project info -------------------------------------------------------------
 
 project = "MSNoise Reproducible Papers"
-copyright = "2026, Royal Observatory of Belgium"
+copyright = "2026, Thomas Lecocq"
 author = "Thomas Lecocq et al."
 
 # version is not semver here — use the registry paper count or leave blank
