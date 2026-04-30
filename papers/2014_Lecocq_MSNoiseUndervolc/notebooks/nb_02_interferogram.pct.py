@@ -59,10 +59,11 @@ import numpy as np
 import pandas as pd
 
 params     = result_stack.params
-mov_stacks = params.stack.mov_stack   # list of ("1D","1D") tuples
+mov_stacks = eval(params.stack.mov_stack)   # list of ("1D","1D") tuples
 print("Moving-window stacks:", mov_stacks)
+print(type(mov_stacks[0]))
 
-PAIR      = "YA.UV02:YA.UV05"   # NET.STA:NET.STA format
+PAIR      = "YA.UV02.00:YA.UV05.00"   # NET.STA:NET.STA format
 COMPONENT = "ZZ"
 MINLAG    = 10.0                 # s — lag window for corr. coef. (original code)
 MAXLAG    = 45.0                 # s
@@ -114,16 +115,16 @@ def cc_vs_ref(da):
 
 
 cc_data = {}
+cc_times = {}
 for ms in mov_stacks:
     da = result_stack.get_ccf(pair=PAIR, components=COMPONENT, mov_stack=ms)
     cc_data[ms] = cc_vs_ref(da)
+    cc_times[ms] = da.times.values
 
 # %%
 # ------------------------------------------------------------
 # 6 — Plot (Figure 3)
 # ------------------------------------------------------------
-import matplotlib
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.dates as mdates
@@ -160,17 +161,17 @@ ax0.set_ylim(-50, 50)
 ax0.axhline(0, lw=0.5, c="k")
 for lag in (-MAXLAG, -MINLAG, MINLAG, MAXLAG):
     ax0.axhline(lag, ls="--", lw=1.5, c="k")
-ax0.set_title("YA.UV02 : YA.UV05")
+ax0.set_title("YA.UV02.00 : YA.UV05.00")
 ax0.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
 shade_eruptions(ax0)
-plt.colorbar(im, ax=ax0, pad=0.01, fraction=0.015, label="Amplitude")
+# plt.colorbar(im, ax=ax0, pad=0.01, fraction=0.015, label="Amplitude")
 
 # -- Correlation coefficient panels --
 for idx, ms in enumerate(mov_stacks, start=1):
     ax = fig.add_subplot(gs[idx], sharex=ax0)
     cc_neg, cc_pos = cc_data[ms]
-    ax.plot(times, cc_neg, c="g", lw=0.8, label="Negative Lags")
-    ax.plot(times, cc_pos, c="r", lw=0.8, label="Positive Lags")
+    ax.plot(cc_times[ms], cc_neg, c="g", lw=0.8, label="Negative Lags")
+    ax.plot(cc_times[ms], cc_pos, c="r", lw=0.8, label="Positive Lags")
     shade_eruptions(ax)
     ax.set_ylabel("Corr. Coef")
     ax.set_ylim(0.2, 1.05)
@@ -187,9 +188,7 @@ for idx, ms in enumerate(mov_stacks, start=1):
 
 fig.suptitle(
     "Lecocq et al. (2014) — Fig. 3\n"
-    "Interferogram + Correlation Coefficients — YA.UV02–YA.UV05, ZZ, 0.2–0.85 Hz",
+    "Interferogram + Correlation Coefficients — YA.UV02.00–YA.UV05.00, ZZ, 0.2–0.85 Hz",
     fontsize=11,
 )
-plt.savefig("fig3_interferogram.png", dpi=150, bbox_inches="tight")
 plt.show()
-print("Saved fig3_interferogram.png")

@@ -48,7 +48,7 @@ result_dvv = dvv_results[0]
 print(result_dvv)
 
 params     = result_dvv.params
-mov_stacks = params.stack.mov_stack   # list of ("1D","1D") tuples
+mov_stacks = eval(params.stack.mov_stack)   # list of ("1D","1D") tuples
 print("Moving-window stacks:", mov_stacks)
 
 # %%
@@ -65,14 +65,12 @@ for ms in mov_stacks:
                              mov_stack=ms)
     if ds is not None:
         print(f"{ms}: vars={list(ds.data_vars)}")
-        dvv_data[ms] = ds
+        dvv_data[ms] = ds * 100
 
 # %%
 # ------------------------------------------------------------
 # 3 — Helpers
 # ------------------------------------------------------------
-import matplotlib
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.dates as mdates
@@ -147,7 +145,7 @@ if MS_FIG7 in dvv_data:
     shade_eruptions(ax)
     ax.set_ylabel(r"$\delta v/v$ in %")
     ax.set_ylim(YLIM)
-    ax.invert_yaxis()
+    # ax.invert_yaxis()
     ax.set_xlim(XLIM)
     ax.grid(True, lw=0.3)
     ax.legend(loc="upper right", fontsize=9)
@@ -157,9 +155,7 @@ if MS_FIG7 in dvv_data:
     )
     fmt_xaxis(ax)
     plt.tight_layout()
-    plt.savefig("fig7_dvv_10day.png", dpi=150, bbox_inches="tight")
     plt.show()
-    print("Saved fig7_dvv_10day.png")
 else:
     print(f"WARNING: {MS_FIG7} not available — skipping Fig 7")
 
@@ -200,7 +196,7 @@ else:
         shade_eruptions(ax)
         ax.set_ylabel(r"$\delta v/v$ in %")
         ax.set_ylim(YLIM)
-        ax.invert_yaxis()
+        # ax.invert_yaxis()
         ax.set_xlim(XLIM)
         ax.grid(True, lw=0.3)
         ax.set_title(f"{ms[0]} Moving-Window", fontsize=10)
@@ -221,6 +217,5 @@ else:
         fontsize=11,
     )
     plt.tight_layout()
-    plt.savefig("fig8_dvv_multimovstack.png", dpi=150, bbox_inches="tight")
     plt.show()
-    print("Saved fig8_dvv_multimovstack.png")
+
