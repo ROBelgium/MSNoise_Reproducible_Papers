@@ -1,17 +1,20 @@
 # %% [markdown]
-# # Figures 7 & 8 — dv/v Timeseries
-#
-# Reproduces Figures 7 and 8 of Lecocq, Caudron & Brenguier (2014), SRL 85(3).
-#
-# **Figure 7:** dv/v for the 10-day moving-window stack (paper compares
-# MSNoise vs D. Clarke's FORTRAN — only MSNoise shown here).
-#
-# **Figure 8:** Detrended dv/v for five moving-window stacks (1, 2, 5, 10,
-# 30 days).  Red = ``ALL`` network mean; green = weighted mean of pairs.
-# Red vertical bands = eruptions of Piton de la Fournaise.
-#
-# **Bundle level required:** ``dvv``
-#
+"""
+Figures 7 & 8 — dv/v Timeseries
+=================================
+
+Reproduces Figures 7 and 8 of Lecocq, Caudron & Brenguier (2014), SRL 85(3).
+
+**Figure 7:** dv/v for the 10-day moving-window stack (paper compares
+MSNoise vs D. Clarke's FORTRAN — only MSNoise shown here).
+
+**Figure 8:** Detrended dv/v for five moving-window stacks (1, 2, 5, 10,
+30 days).  Red = ``ALL`` network mean; green = weighted mean of pairs.
+Red vertical bands = eruptions of Piton de la Fournaise.
+
+**Bundle level required:** ``dvv``
+"""
+
 # sphinx_gallery_thumbnail_number = 2
 
 # %%

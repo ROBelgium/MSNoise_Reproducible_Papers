@@ -1,17 +1,20 @@
 # %% [markdown]
-# # Figure 3 — Interferogram and Correlation Coefficients
-#
-# Reproduces Figure 3 of Lecocq, Caudron & Brenguier (2014), SRL 85(3).
-#
-# **Top panel:** daily stacked CCFs for pair YA.UV02–YA.UV05 displayed
-# as a time–lag image.
-#
-# **Lower panels:** absolute correlation coefficient of different
-# moving-window stacks against the reference stack, for negative and
-# positive lag windows independently.
-#
-# **Bundle level required:** ``stack``
-#
+"""
+Figure 3 — Interferogram and Correlation Coefficients
+======================================================
+
+Reproduces Figure 3 of Lecocq, Caudron & Brenguier (2014), SRL 85(3).
+
+**Top panel:** daily stacked CCFs for pair YA.UV02–YA.UV05 displayed
+as a time–lag image.
+
+**Lower panels:** absolute correlation coefficient of different
+moving-window stacks against the reference stack, for negative and
+positive lag windows independently.
+
+**Bundle level required:** ``stack``
+"""
+
 # sphinx_gallery_thumbnail_number = 1
 
 # %%

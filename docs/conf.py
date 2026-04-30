@@ -50,7 +50,7 @@ _notebook_dirs = sorted(
 sphinx_gallery_conf = {
     "examples_dirs": [str(d) for d in _notebook_dirs],
     "gallery_dirs":  [f"auto_papers/{d.parent.name}" for d in _notebook_dirs],
-    "filename_pattern": r"nb_.*\.py",
+    "filename_pattern": r"nb_.*\.pct\.py",
     "ignore_pattern": r"__init__\.py",
     # Notebooks are not executed at build time — archives are too large for CI.
     # Set to True locally if you have the project_bundle/ dirs in place.
