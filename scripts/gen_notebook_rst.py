@@ -154,8 +154,9 @@ def generate_paper(paper_dir: pathlib.Path) -> bool:
     for nb in notebooks:
         shutil.copy2(nb, dest / nb.name)
 
-    # Notebook stems for toctree (strip trailing .py)
-    nb_stems = [nb.stem for nb in notebooks]
+    # Toctree entries: strip the full .pct.py suffix so Sphinx resolves
+    # the nbsphinx-registered source suffix correctly.
+    nb_stems = [nb.name[: -len(".pct.py")] for nb in notebooks]
     toctree_entries = "\n".join(f"   {s}" for s in nb_stems)
 
     intro = _build_intro(paper_dir, bib, meta)
