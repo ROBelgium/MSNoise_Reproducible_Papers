@@ -19,17 +19,14 @@ so results can be reproduced from any entry level.
 
    papers_index
 
-.. only:: html
-
-   .. note::
-
-      Notebooks listed under each paper are rendered from
-      ``papers/<paper_id>/notebooks/``.  To execute them locally with
-      real data, see :doc:`usage`.
-
 .. toctree::
    :maxdepth: 1
    :caption: Notebook galleries
    :glob:
 
    auto_papers/*/index
+
+.. note::
+
+   Notebooks are shown as static source (no outputs) unless executed locally
+   with the project bundles in place.  See :doc:`usage` for instructions.

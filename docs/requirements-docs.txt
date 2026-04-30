@@ -1,12 +1,16 @@
 sphinx>=7.0
 sphinx-rtd-theme>=2.0
-sphinx-gallery>=0.16
+sphinx-gallery>=0.16   # load_style CSS only
+nbsphinx>=0.9
 numpydoc>=1.7
 sphinxcontrib-jquery>=4.1
 # Notebook format
 jupytext>=1.16
+# nbsphinx uses pandoc internally for RST cell conversion.
+# Install the system binary separately: https://pandoc.org/installing.html
+# On Windows: winget install JohnMacFarlane.Pandoc
 # MRP runtime deps (needed so conf.py can import scripts)
 msnoise @ git+https://github.com/ROBelgium/MSNoise.git@master
 pooch>=1.8
 zstandard>=0.22
-m2r2>=0.3          # README.md → RST conversion used by gen_notebook_rst.py
+m2r2>=0.3          # README.md -> RST conversion used by gen_notebook_rst.py

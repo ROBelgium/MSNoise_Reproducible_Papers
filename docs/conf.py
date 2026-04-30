@@ -26,7 +26,8 @@ extensions = [
     "sphinx.ext.graphviz",
     "numpydoc",
     "sphinxcontrib.jquery",
-    "sphinx_gallery.gen_gallery",
+    "nbsphinx",
+    "sphinx_gallery.load_style",   # gallery CSS only — no gen_gallery
 ]
 
 templates_path = ["_templates"]
@@ -39,31 +40,16 @@ intersphinx_mapping = {
     "msnoise": ("https://msnoise.org/doc", None),
 }
 
-# -- sphinx_gallery config ----------------------------------------------------
-# Discover all papers/*/notebooks/ directories dynamically.
+# -- nbsphinx config ----------------------------------------------------------
+# .pct.py files are Jupytext percent-format notebooks converted via jupytext.
+# Execution is disabled by default — data bundles are too large for CI.
+# Set nbsphinx_execute = 'always' locally once project_bundle/ dirs are ready.
 
-_papers_root = ROOT / "papers"
-_notebook_dirs = sorted(
-    d for d in _papers_root.glob("*/notebooks") if d.is_dir()
-)
-
-sphinx_gallery_conf = {
-    "examples_dirs": [str(d) for d in _notebook_dirs],
-    "gallery_dirs":  [f"auto_papers/{d.parent.name}" for d in _notebook_dirs],
-    "filename_pattern": r"nb_.*\.pct\.py",
-    "ignore_pattern": r"__init__\.py",
-    # Notebooks are not executed at build time — archives are too large for CI.
-    # Set to True locally if you have the project_bundle/ dirs in place.
-    "plot_gallery": False,
-    "download_all_examples": False,
-    "show_signature": False,
-    "doc_module": (),
-    "reference_url": {},
-    "first_notebook_cell": (
-        "# This notebook is part of MSNoise Reproducible Papers.\n"
-        "# See https://github.com/ROBelgium/MSNoise_Reproducible_Papers\n"
-    ),
+nbsphinx_custom_formats = {
+    ".pct.py": ["jupytext.reads", {"fmt": "py:percent"}],
 }
+nbsphinx_execute      = "never"
+nbsphinx_allow_errors = True
 
 # -- autodoc ------------------------------------------------------------------
 
