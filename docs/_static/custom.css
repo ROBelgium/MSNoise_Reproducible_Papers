@@ -1,0 +1,7 @@
+/* MRP — thin overrides on top of sphinx_rtd_theme.
+   Keep in sync with MSNoise master docs/_static/custom.css if that file exists. */
+
+/* Widen the content column slightly for notebook output tables */
+.wy-nav-content {
+    max-width: 1000px;
+}

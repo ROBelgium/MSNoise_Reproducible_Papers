@@ -1,0 +1,7 @@
+# Sphinx build output
+docs/_build/
+docs/auto_papers/
+
+# Generated RST files (rebuilt from source before each Sphinx run)
+docs/papers_index.rst
+papers/*/notebooks/README.rst
