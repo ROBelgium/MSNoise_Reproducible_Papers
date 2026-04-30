@@ -370,6 +370,8 @@ def generate_paper(paper_dir: pathlib.Path):
     page = _build_page(paper_dir, bib, meta, proj, bundles, notebooks)
     (dest / "index.rst").write_text(page, encoding="utf-8")
 
+    if notebooks:
+        return True, _short_title(bib) + " \U0001f40d"
     return True, _short_title(bib)
 
 
