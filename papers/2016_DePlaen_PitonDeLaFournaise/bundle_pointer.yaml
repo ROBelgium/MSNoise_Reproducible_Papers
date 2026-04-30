@@ -1,0 +1,28 @@
+msnoise_version_min: 2.0.0
+created_at: '2026-04-30'
+levels:
+  preprocess:
+    description: '20 Hz preprocessed data'
+    url: ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2016_DePlaen_PitonDeLaFournaise/level_preprocess.tar.zst
+    sha256: b2da0d2856ed79f2823cc7a39d7b2650be416d7d8d2623335e11e365d7f62bb4
+    size_gb: 12.072
+  cc:
+    description: 'CC results, 4 filters, all & daily'
+    url: ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2016_DePlaen_PitonDeLaFournaise/level_cc.tar.zst
+    sha256: 95ac0ea4e3f7c0078d5172f693a230d4351f410e29e1c9ddf2bf4ba0c7837d8b
+    size_gb: 11.19
+  stack:
+    description: '5D-1D stack of all the data'
+    url: ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2016_DePlaen_PitonDeLaFournaise/level_stack.tar.zst
+    sha256: 94cd58f79afcc8339058e4790db8e88ff0313291b0cf02b9e0dbe984b0de4e5b
+    size_gb: 0.236
+  mwcs:
+    description: 'MWCS & MWCS_DTT outputs'
+    url: ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2016_DePlaen_PitonDeLaFournaise/level_mwcs.tar.zst
+    sha256: 7291243b23a908a1ac3ab50dd03823cdca9aae29e720803fd50c7702ee850231
+    size_gb: 0.007
+  dvv:
+    description: 'MWCS_DVV outputs for the 4 filters'
+    url: ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2016_DePlaen_PitonDeLaFournaise/level_dvv.tar.zst
+    sha256: 8db8a3c357e0d08b7996f435ea9aeb28422962c2deb222517546faca70faa8b8
+    size_gb: 0.001
