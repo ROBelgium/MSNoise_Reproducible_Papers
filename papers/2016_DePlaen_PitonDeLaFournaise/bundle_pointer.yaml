@@ -12,7 +12,7 @@ levels:
     sha256: 95ac0ea4e3f7c0078d5172f693a230d4351f410e29e1c9ddf2bf4ba0c7837d8b
     size_gb: 11.19
   stack:
-    description: '5D-1D stack of all the data'
+    description: '5D-1D stack of all the data & REF stacks'
     url: ftp://ftp-as.oma.be/dist/astro/Lecocq.T/MRP/2016_DePlaen_PitonDeLaFournaise/level_stack.tar.zst
     sha256: 94cd58f79afcc8339058e4790db8e88ff0313291b0cf02b9e0dbe984b0de4e5b
     size_gb: 0.236
