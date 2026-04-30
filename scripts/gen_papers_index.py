@@ -14,16 +14,16 @@ OUT = ROOT / "docs" / "papers_index.rst"
 
 def _levels_str(levels: list) -> str:
     if not levels:
-        return "—"
-    return ", ".join(f"``{l}``" for l in levels)
+        return "-"
+    return ", ".join(f"``{lv}``" for lv in levels)
 
 
-def _bool_icon(val: bool) -> str:
+def _bool_flag(val: bool) -> str:
     return "✅" if val else "❌"
 
 
 def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OUT):
-    with open(registry_path) as fh:
+    with open(registry_path, encoding="utf-8") as fh:
         registry = yaml.safe_load(fh)
 
     papers = registry.get("papers", [])
@@ -52,18 +52,18 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
     ]
 
     for p in sorted(papers, key=lambda x: x.get("year", 0)):
-        paper_id = p.get("id", "")
-        year     = p.get("year", "")
-        title    = p.get("title", paper_id)
-        authors  = ", ".join(p.get("authors", []))
-        journal  = p.get("journal_abbrev", "")
-        network  = p.get("network", "")
-        region   = p.get("region", "")
-        levels   = _levels_str(p.get("levels_available", []))
-        open_    = _bool_icon(p.get("data_open", False))
-        valid    = _bool_icon(p.get("validated", False))
+        paper_id  = p.get("id", "")
+        year      = p.get("year", "")
+        title     = p.get("title", paper_id)
+        authors   = ", ".join(p.get("authors", []))
+        journal   = p.get("journal_abbrev", "")
+        network   = p.get("network", "")
+        region    = p.get("region", "")
+        levels    = _levels_str(p.get("levels_available", []))
+        open_flag = _bool_flag(p.get("data_open", False))
+        val_flag  = _bool_flag(p.get("validated", False))
 
-        # Link to auto-generated gallery if notebooks exist
+        # Link to auto-generated gallery if notebooks exist.
         nb_dir = ROOT / "papers" / paper_id / "notebooks"
         if nb_dir.is_dir() and any(nb_dir.glob("nb_*.py")):
             title_cell = f":doc:`auto_papers/{paper_id}/index`"
@@ -78,3 +78,13 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
             f"     - {network}",
             f"     - {region}",
             f"     - {levels}",
+            f"     - {open_flag}",
+            f"     - {val_flag}",
+        ]
+
+    out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"Written {out_path} ({len(papers)} papers)")
+
+
+if __name__ == "__main__":
+    generate()
