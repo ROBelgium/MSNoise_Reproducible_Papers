@@ -70,3 +70,11 @@ def generate(papers_root: pathlib.Path = PAPERS):
         out.write_text(rst_text, encoding="utf-8")
         written.append(paper_dir.name)
 
+    if written:
+        print(f"Written README.rst for: {', '.join(written)}")
+    if skipped:
+        print(f"Skipped (no notebooks/ dir): {', '.join(skipped)}")
+
+
+if __name__ == "__main__":
+    generate()

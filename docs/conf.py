@@ -81,7 +81,7 @@ html_theme_options = {
     "titles_only": False,
 }
 html_static_path = ["_static"]
-html_css_files = ["custom.css"]
+html_css_files = ["my-styles.css"]
 
 # -- numpydoc -----------------------------------------------------------------
 
@@ -89,3 +89,9 @@ numpydoc_show_class_members = False
 
 # -- Pre-build hooks ----------------------------------------------------------
 
+def setup(app):
+    """Generate derived RST files before Sphinx reads sources."""
+    import subprocess
+    scripts = ROOT / "scripts"
+    for script in ("gen_notebook_rst.py", "gen_papers_index.py"):
+        subprocess.check_call([sys.executable, str(scripts / script)])

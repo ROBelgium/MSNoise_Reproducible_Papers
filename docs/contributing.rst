@@ -59,13 +59,22 @@ Key rules:
 
     A few non-obvious key names differ from MSNoise 1.x notation:
 
-    ==================  =================  =========================
-    Category            Correct key        Wrong (silently ignored)
-    ==================  =================  =========================
-    ``mwcs``            ``freqmin``        ``mwcs_low``
-    ``mwcs_dtt``        ``dtt_maxdtt``     ``dtt_maxdt``
-    ``wavelet_dtt``     ``wct_dtt_freqmin`` ``wct_freqmin``
-    ==================  =================  =========================
+    .. list-table::
+       :header-rows: 1
+       :widths: 15 20 20
+
+       * - Category
+         - Correct key
+         - Wrong (silently ignored)
+       * - ``mwcs``
+         - ``freqmin``
+         - ``mwcs_low``
+       * - ``mwcs_dtt``
+         - ``dtt_maxdtt``
+         - ``dtt_maxdt``
+       * - ``wavelet_dtt``
+         - ``wct_dtt_freqmin``
+         - ``wct_freqmin``
 
 ``data_sources`` requirement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
