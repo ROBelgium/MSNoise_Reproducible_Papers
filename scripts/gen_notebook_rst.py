@@ -80,8 +80,8 @@ def _short_title(bib: dict) -> str:
 
 def _build_intro(paper_dir: pathlib.Path, bib: dict, meta: dict) -> str:
     """Build an RST intro block from bib + meta data."""
-    title = _short_title(bib)
-    full_title  = bib["title"] or paper_dir.name
+    short_title = _short_title(bib)
+    title  = bib["title"] or paper_dir.name
     authors    = _author_list(bib["authors"])
     year       = bib["year"]
     journal    = meta.get("journal_abbrev") or bib["journal"]
@@ -179,7 +179,7 @@ def generate_paper(paper_dir: pathlib.Path) -> bool:
 {toctree_entries}
 """
     (dest / "index.rst").write_text(index_rst, encoding="utf-8")
-    return True
+    return True, _short_title(bib)
 
 
 # ---------------------------------------------------------------------------
@@ -187,21 +187,49 @@ def generate_paper(paper_dir: pathlib.Path) -> bool:
 # ---------------------------------------------------------------------------
 
 def generate(papers_root: pathlib.Path = PAPERS):
-    written = []
-    skipped = []
+    written  = []
+    skipped  = []
+    entries  = []   # (short_title, paper_id) for the labeled toctree
 
     for paper_dir in sorted(papers_root.iterdir()):
         if not paper_dir.is_dir():
             continue
-        if generate_paper(paper_dir):
+        result = generate_paper(paper_dir)
+        if result:
+            _, short = result
             written.append(paper_dir.name)
+            entries.append((short, paper_dir.name))
         else:
             skipped.append(paper_dir.name)
+
+    _write_galleries_toctree(entries)
 
     if written:
         print(f"Generated notebook docs for: {', '.join(written)}")
     if skipped:
         print(f"Skipped (no notebooks): {', '.join(skipped)}")
+
+
+def _write_galleries_toctree(entries: list):
+    """Write docs/_notebook_galleries.rst with explicit labeled toctree entries.
+
+    Replaces the :glob: toctree in docs/index.rst so sidebar labels can
+    differ from page H1 titles.
+    """
+    out = ROOT / "docs" / "_notebook_galleries.rst"
+    if not entries:
+        out.write_text("", encoding="utf-8")
+        return
+
+    toc_lines = [".. toctree::",
+                 "   :maxdepth: 1",
+                 "   :caption: Notebook galleries",
+                 ""]
+    for short, paper_id in sorted(entries):   # sorted by short title = by year
+        toc_lines.append(f"   {short} <auto_papers/{paper_id}/index>")
+    toc_lines.append("")
+
+    out.write_text("\n".join(toc_lines), encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -134,20 +134,20 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
         f"The registry currently contains **{len(papers)} paper(s)**.",
         "",
         "Columns: **Open** = data freely available via FDSN or public archive;",
-        "**Validated** = pipeline run end-to-end by a maintainer.",
+        "**Validated** = pipeline run end-to-end by a maintainer;",
+        "**Notebooks** = analysis notebooks available in this registry.",
         "",
         ".. list-table::",
         "   :header-rows: 1",
-        "   :widths: 8 30 8 8 12 16 5 5",
+        "   :width: 80%",
         "",
-        "   * - Ref",
-        "     - Title / Authors",
-        "     - Journal",
+        "   * - Title / Authors",
         "     - Network",
         "     - Region",
         "     - Levels available",
         "     - Open",
         "     - Validated",
+        "     - Notebooks",
     ]
 
     for p in sorted_papers:
@@ -158,7 +158,7 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
         levels    = _levels_str(p.get("levels_available", []))
         open_flag = _bool_flag(p.get("data_open", False))
         val_flag  = _bool_flag(p.get("validated", False))
-        journal   = p.get("journal_abbrev", "")
+        journal   = p.get("journal", "")
 
         if bib:
             label   = _ref_label(bib)
@@ -171,9 +171,12 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
             authors = ""
             doi     = p.get("doi", "")
 
+        nb_dir  = ROOT / "papers" / pid / "notebooks"
+        has_nbs = nb_dir.is_dir() and any(nb_dir.glob("nb_*.pct.py"))
+        nb_flag = "✅" if has_nbs else ""
+
         # Title cell: gallery link > DOI link > plain text
-        nb_dir = ROOT / "papers" / pid / "notebooks"
-        if nb_dir.is_dir() and any(nb_dir.glob("nb_*.py")):
+        if has_nbs:
             title_cell = f":doc:`auto_papers/{pid}/index`"
         elif doi:
             title_cell = f"`{title} <https://doi.org/{doi}>`_"
@@ -181,15 +184,15 @@ def generate(registry_path: pathlib.Path = REGISTRY, out_path: pathlib.Path = OU
             title_cell = title
 
         lines += [
-            f"   * - [{label}]_",
-            f"     - | {title_cell}",
+            f"   * - | {title_cell}",
             f"       | *{authors}*",
-            f"     - {journal}",
+            f"       | {journal}",
             f"     - {network}",
             f"     - {region}",
             f"     - {levels}",
             f"     - {open_flag}",
             f"     - {val_flag}",
+            f"     - {nb_flag}",
         ]
 
     # ------------------------------------------------------------------

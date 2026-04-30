@@ -13,20 +13,7 @@ so results can be reproduced from any entry level.
    usage
    contributing
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Papers
+.. include:: papers_index.rst
 
-   papers_index
+.. include:: _notebook_galleries.rst
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Notebook galleries
-   :glob:
-
-   auto_papers/*/index
-
-.. note::
-
-   Notebooks are shown as static source (no outputs) unless executed locally
-   with the project bundles in place.  See :doc:`usage` for instructions.
